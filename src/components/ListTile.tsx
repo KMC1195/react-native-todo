@@ -1,9 +1,17 @@
-import {View, Text} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import {colors} from '../theme/colors';
 import {Swipeable} from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 export default function ListTile() {
+  const itemHeight = useSharedValue(60);
+  const itemMarginBottom = useSharedValue(10);
+
   function rightSwipe() {
     return (
       <View
@@ -16,21 +24,36 @@ export default function ListTile() {
     );
   }
 
+  function onListTileDelete() {
+    itemHeight.value = withTiming(0, {duration: 300});
+    itemMarginBottom.value = withTiming(0, {duration: 300});
+  }
+
+  const containerAnimatedStyles = useAnimatedStyle(() => {
+    return {
+      height: itemHeight.value,
+      marginBottom: itemMarginBottom.value,
+    };
+  });
+
   return (
-    <Swipeable renderRightActions={rightSwipe}>
-      <View
-        style={{
-          backgroundColor: colors.lightGray,
-          padding: 15,
-          borderRadius: 10,
-          marginBottom: 10,
-          height: 60,
-          justifyContent: 'center',
-        }}>
+    <Swipeable
+      renderRightActions={rightSwipe}
+      onSwipeableOpen={onListTileDelete}>
+      <Animated.View style={[styles.container, containerAnimatedStyles]}>
         <Text style={{fontSize: 20, color: colors.darkGray, fontWeight: '600'}}>
           Walk the dog
         </Text>
-      </View>
+      </Animated.View>
     </Swipeable>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.lightGray,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+});
