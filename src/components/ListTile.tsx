@@ -7,8 +7,14 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {Project} from '../models/todos_models';
+import {TrashIcon} from 'react-native-heroicons/outline';
 
-export default function ListTile() {
+interface Props {
+  project: Project;
+}
+
+export default function ListTile({project}: Props) {
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
 
@@ -20,7 +26,12 @@ export default function ListTile() {
           height: 60,
           flex: 1,
           borderRadius: 10,
-        }}></View>
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          paddingHorizontal: 20,
+        }}>
+        <TrashIcon color="white" strokeWidth={2} size={30} />
+      </View>
     );
   }
 
@@ -42,7 +53,7 @@ export default function ListTile() {
       onSwipeableOpen={onListTileDelete}>
       <Animated.View style={[styles.container, containerAnimatedStyles]}>
         <Text style={{fontSize: 20, color: colors.darkGray, fontWeight: '600'}}>
-          Walk the dog
+          {project.name}
         </Text>
       </Animated.View>
     </Swipeable>
