@@ -1,32 +1,30 @@
-import {
-  View,
-  Text,
-  Button,
-  SafeAreaView,
-  TextInput,
-  Platform,
-  ScrollView,
-} from 'react-native';
+import {View, SafeAreaView, useColorScheme, ScrollView} from 'react-native';
 import React, {useContext} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
 import MyTextInput from '../components/MyTextInput';
 import ListTile from '../components/ListTile';
 import {TodosContext} from '../store/todos_context';
+import StyledText from '../components/StyledText';
 
 interface Props {
   navigation: NavigationProp<any, any>;
 }
 
 export default function HomeScreen({navigation}: Props) {
+  const isDarkMode = useColorScheme() === 'dark';
   const todos = useContext(TodosContext);
 
   return (
-    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
+    <SafeAreaView
+      style={{
+        backgroundColor: isDarkMode ? colors.darkGray : 'white',
+        flex: 1,
+      }}>
       <ScrollView
         style={{paddingHorizontal: 10}}
         showsVerticalScrollIndicator={false}>
-        <Text style={{fontSize: 70, color: colors.darkGray}}>ToDo</Text>
+        <StyledText styles={{fontSize: 70}}>ToDo</StyledText>
 
         <MyTextInput></MyTextInput>
 

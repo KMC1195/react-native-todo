@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, useColorScheme} from 'react-native';
 import React from 'react';
 import {colors} from '../theme/colors';
 import {Swipeable} from 'react-native-gesture-handler';
@@ -9,12 +9,15 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Project} from '../models/todos_models';
 import {TrashIcon} from 'react-native-heroicons/outline';
+import StyledText from './StyledText';
 
 interface Props {
   project: Project;
 }
 
 export default function ListTile({project}: Props) {
+  const isDarkMode = useColorScheme() === 'dark';
+
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
 
@@ -51,10 +54,13 @@ export default function ListTile({project}: Props) {
     <Swipeable
       renderRightActions={rightSwipe}
       onSwipeableOpen={onListTileDelete}>
-      <Animated.View style={[styles.container, containerAnimatedStyles]}>
-        <Text style={{fontSize: 20, color: colors.darkGray, fontWeight: '600'}}>
-          {project.name}
-        </Text>
+      <Animated.View
+        style={[
+          styles.container,
+          containerAnimatedStyles,
+          {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
+        ]}>
+        <StyledText styles={{fontWeight: '600'}}>{project.name}</StyledText>
       </Animated.View>
     </Swipeable>
   );
@@ -62,7 +68,6 @@ export default function ListTile({project}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.lightGray,
     paddingHorizontal: 15,
     borderRadius: 10,
     justifyContent: 'center',
