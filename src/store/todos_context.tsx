@@ -15,6 +15,7 @@ export const TodosContext = createContext({
       tasks: [{name: '', completed: false, id: 0}],
     },
   ],
+  deleteProject: (projectId: number) => {},
 });
 
 export default function TodosContextProvder({children}: Props) {
@@ -42,8 +43,15 @@ export default function TodosContextProvder({children}: Props) {
     },
   ]);
 
+  function deleteProject(projectId: number) {
+    let temporaryItems = [...items];
+    temporaryItems = temporaryItems.filter(el => el.id !== projectId);
+    setItems(temporaryItems);
+  }
+
   const valueObject = {
     items: items,
+    deleteProject,
   };
   return (
     <TodosContext.Provider value={valueObject}>
