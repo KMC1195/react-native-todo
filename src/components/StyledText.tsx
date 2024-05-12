@@ -4,7 +4,7 @@ import {colors} from '../theme/colors';
 
 interface Props {
   children: ReactNode;
-  styles: TextStyle;
+  styles?: TextStyle;
 }
 
 export default function StyledText({children, styles}: Props) {

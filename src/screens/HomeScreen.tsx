@@ -6,6 +6,7 @@ import MyTextInput from '../components/MyTextInput';
 import ListTile from '../components/ListTile';
 import {TodosContext} from '../store/todos_context';
 import StyledText from '../components/StyledText';
+import FAB from '../components/FAB';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -26,7 +27,7 @@ export default function HomeScreen({navigation}: Props) {
         showsVerticalScrollIndicator={false}>
         <StyledText styles={{fontSize: 70}}>ToDo</StyledText>
 
-        <MyTextInput></MyTextInput>
+        <MyTextInput placeholder="Search..." />
 
         <View style={{marginTop: 30}}>
           {todos.items.map(item => (
@@ -34,6 +35,7 @@ export default function HomeScreen({navigation}: Props) {
           ))}
         </View>
       </ScrollView>
+      <FAB navigation={navigation} />
     </SafeAreaView>
   );
 }
