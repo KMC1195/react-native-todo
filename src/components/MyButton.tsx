@@ -19,7 +19,9 @@ export default function MyButton({children, onPress}: Props) {
         styles.container,
         {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
       ]}>
-      <StyledText>{children}</StyledText>
+      <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+        {children}
+      </StyledText>
     </Pressable>
   );
 }

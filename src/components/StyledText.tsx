@@ -13,7 +13,11 @@ export default function StyledText({children, styles}: Props) {
   return (
     <Text
       style={[
-        {fontSize: 20, color: isDarkMode ? 'white' : colors.darkGray},
+        {
+          fontSize: 20,
+          color: isDarkMode ? 'white' : colors.darkGray,
+          fontFamily: 'Poppins-Regular',
+        },
         styles,
       ]}>
       {children}

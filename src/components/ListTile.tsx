@@ -66,7 +66,9 @@ export default function ListTile({project}: Props) {
           containerAnimatedStyles,
           {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
         ]}>
-        <StyledText styles={{fontWeight: '600'}}>{project.name}</StyledText>
+        <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+          {project.name}
+        </StyledText>
       </Animated.View>
     </Swipeable>
   );
