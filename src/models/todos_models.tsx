@@ -7,7 +7,8 @@ export interface Task {
 export interface Project {
   name: string;
   description: string;
+  datetime: Date;
   completed: boolean;
   id: number;
-  tasks: Task[];
+  tasks: never[];
 }

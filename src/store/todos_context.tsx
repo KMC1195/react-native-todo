@@ -11,11 +11,13 @@ export const TodosContext = createContext({
       name: '',
       description: '',
       completed: false,
+      datetime: new Date(),
       id: 0,
       tasks: [{name: '', completed: false, id: 0}],
     },
   ],
   deleteProject: (projectId: number) => {},
+  addProject: (newProject: Project) => {},
 });
 
 export default function TodosContextProvder({children}: Props) {
@@ -24,6 +26,7 @@ export default function TodosContextProvder({children}: Props) {
       name: 'Test 1',
       description: 'Desc',
       completed: false,
+      datetime: new Date(),
       id: 0,
       tasks: [],
     },
@@ -31,6 +34,7 @@ export default function TodosContextProvder({children}: Props) {
       name: 'Test 2',
       description: 'Desc',
       completed: false,
+      datetime: new Date(),
       id: 1,
       tasks: [],
     },
@@ -38,6 +42,7 @@ export default function TodosContextProvder({children}: Props) {
       name: 'Test 3',
       description: 'Desc',
       completed: false,
+      datetime: new Date(),
       id: 2,
       tasks: [],
     },
@@ -49,9 +54,16 @@ export default function TodosContextProvder({children}: Props) {
     setItems(temporaryItems);
   }
 
+  function addProject(newProject: Project) {
+    let temporaryItems = [...items];
+    temporaryItems.push(newProject);
+    setItems(temporaryItems);
+  }
+
   const valueObject = {
     items: items,
     deleteProject,
+    addProject,
   };
   return (
     <TodosContext.Provider value={valueObject}>

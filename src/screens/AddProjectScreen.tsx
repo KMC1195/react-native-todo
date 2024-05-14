@@ -7,7 +7,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
 import StyledText from '../components/StyledText';
@@ -17,6 +17,7 @@ import MyButton from '../components/MyButton';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
+import {TodosContext} from '../store/todos_context';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -24,6 +25,10 @@ interface Props {
 
 export default function AddProjectScreen({navigation}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
+  const todos = useContext(TodosContext);
+
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   // Datetimepicker logic
   const [date, setDate] = useState(new Date());
@@ -47,6 +52,21 @@ export default function AddProjectScreen({navigation}: Props) {
   }
   function showTimePicker() {
     showMode('time');
+  }
+
+  // Adding project logic
+  function addProject() {
+    const newProject = {
+      name,
+      description,
+      datetime: date,
+      completed: false,
+      id: Math.random(),
+      tasks: [],
+    };
+
+    todos.addProject(newProject);
+    navigation.goBack();
   }
 
   return (
@@ -82,11 +102,20 @@ export default function AddProjectScreen({navigation}: Props) {
           }}>
           <View>
             <StyledText>Title:</StyledText>
-            <MyTextInput placeholder="Enter a title..." />
+            <MyTextInput
+              placeholder="Enter a title..."
+              value={name}
+              setValue={setName}
+            />
           </View>
           <View style={{marginTop: 20}}>
             <StyledText>Description:</StyledText>
-            <MyTextInput placeholder="Enter a title..." multiline />
+            <MyTextInput
+              placeholder="Enter a title..."
+              multiline
+              value={description}
+              setValue={setDescription}
+            />
           </View>
 
           <View
@@ -112,7 +141,7 @@ export default function AddProjectScreen({navigation}: Props) {
           <StyledText>{`${date}`}</StyledText>
 
           <View style={{marginTop: 60}}>
-            <MyButton onPress={() => {}}>Add</MyButton>
+            <MyButton onPress={addProject}>Add</MyButton>
           </View>
         </View>
       </ScrollView>
