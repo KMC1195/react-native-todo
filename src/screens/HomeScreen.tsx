@@ -1,5 +1,5 @@
 import {View, SafeAreaView, useColorScheme, ScrollView} from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
 import MyTextInput from '../components/MyTextInput';
@@ -16,6 +16,8 @@ export default function HomeScreen({navigation}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
   const todos = useContext(TodosContext);
 
+  const [search, setSearch] = useState('');
+
   return (
     <SafeAreaView
       style={{
@@ -27,12 +29,18 @@ export default function HomeScreen({navigation}: Props) {
         showsVerticalScrollIndicator={false}>
         <StyledText styles={{fontSize: 70}}>ToDo</StyledText>
 
-        <MyTextInput placeholder="Search..." />
+        <MyTextInput
+          placeholder="Search..."
+          value={search}
+          setValue={setSearch}
+        />
 
         <View style={{marginTop: 30}}>
-          {todos.items.map(item => (
-            <ListTile key={item.id} project={item} />
-          ))}
+          {todos.items
+            .filter(el => el.name.toLowerCase().includes(search.toLowerCase()))
+            .map(item => (
+              <ListTile key={item.id} project={item} />
+            ))}
         </View>
       </ScrollView>
       <FAB navigation={navigation} />

@@ -28,7 +28,13 @@ export default function TodosContextProvder({children}: Props) {
       completed: false,
       datetime: new Date(),
       id: 0,
-      tasks: [],
+      tasks: [
+        {
+          name: '',
+          completed: false,
+          id: 0,
+        },
+      ],
     },
     {
       name: 'Test 2',

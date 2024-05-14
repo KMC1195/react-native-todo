@@ -10,5 +10,5 @@ export interface Project {
   datetime: Date;
   completed: boolean;
   id: number;
-  tasks: never[];
+  tasks: Task[];
 }
