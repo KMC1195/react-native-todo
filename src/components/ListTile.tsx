@@ -1,7 +1,11 @@
 import {View, Text, StyleSheet, useColorScheme} from 'react-native';
 import React, {useContext} from 'react';
 import {colors} from '../theme/colors';
-import {Swipeable} from 'react-native-gesture-handler';
+import {
+  Gesture,
+  GestureDetector,
+  Swipeable,
+} from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -12,15 +16,24 @@ import {Project} from '../models/todos_models';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
+import {NavigationProp} from '@react-navigation/native';
 
 interface Props {
+  navigation: NavigationProp<any, any>;
   project: Project;
 }
 
-export default function ListTile({project}: Props) {
+export default function ListTile({navigation, project}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
   const todos = useContext(TodosContext);
+
+  const tap = Gesture.Tap().onEnd(() => {
+    runOnJS(navigation.navigate)({
+      name: 'ProjectsDetailsScreen',
+      params: {projectId: project.id},
+    });
+  });
 
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
@@ -60,16 +73,22 @@ export default function ListTile({project}: Props) {
     <Swipeable
       renderRightActions={rightSwipe}
       onSwipeableOpen={onListTileDelete}>
-      <Animated.View
-        style={[
-          styles.container,
-          containerAnimatedStyles,
-          {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
-        ]}>
-        <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
-          {project.name}
-        </StyledText>
-      </Animated.View>
+      <GestureDetector gesture={tap}>
+        <Animated.View
+          style={[
+            styles.container,
+            containerAnimatedStyles,
+            {
+              backgroundColor: isDarkMode
+                ? colors.middleGray
+                : colors.lightGray,
+            },
+          ]}>
+          <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+            {project.name}
+          </StyledText>
+        </Animated.View>
+      </GestureDetector>
     </Swipeable>
   );
 }

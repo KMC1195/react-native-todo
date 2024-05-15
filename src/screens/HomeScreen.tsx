@@ -39,7 +39,7 @@ export default function HomeScreen({navigation}: Props) {
           {todos.items
             .filter(el => el.name.toLowerCase().includes(search.toLowerCase()))
             .map(item => (
-              <ListTile key={item.id} project={item} />
+              <ListTile key={item.id} project={item} navigation={navigation} />
             ))}
         </View>
       </ScrollView>
