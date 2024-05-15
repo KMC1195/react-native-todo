@@ -1,9 +1,16 @@
-import {StyleSheet, SafeAreaView, useColorScheme} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  useColorScheme,
+  ScrollView,
+} from 'react-native';
 import React, {useContext} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {TodosContext} from '../store/todos_context';
 import {colors} from '../theme/colors';
 import Header from '../components/Header';
+import StyledText from '../components/StyledText';
+import MyButton from '../components/MyButton';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -25,6 +32,18 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
         flex: 1,
       }}>
       <Header navigation={navigation} title={project.name} />
+
+      <ScrollView style={{paddingHorizontal: 10}}>
+        <StyledText>{project.description}</StyledText>
+        <MyButton
+          containerStyles={{marginTop: 20}}
+          onPress={() => {
+            todos.deleteProject(project.id);
+            navigation.goBack();
+          }}>
+          Delete project
+        </MyButton>
+      </ScrollView>
     </SafeAreaView>
   );
 }
