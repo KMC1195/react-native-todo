@@ -18,6 +18,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import {TodosContext} from '../store/todos_context';
+import Header from '../components/Header';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -78,22 +79,7 @@ export default function AddProjectScreen({navigation}: Props) {
       <ScrollView
         style={{paddingHorizontal: 10, flex: 1}}
         showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 15,
-            padding: 5,
-          }}>
-          <Pressable onPress={() => navigation.goBack()}>
-            <ArrowLeftIcon
-              color={isDarkMode ? 'white' : colors.darkGray}
-              strokeWidth={2.5}
-              size={25}
-            />
-          </Pressable>
-          <StyledText styles={{fontSize: 30}}>Add Project</StyledText>
-        </View>
+        <Header navigation={navigation} title="Add Project" />
 
         <View
           style={{
