@@ -25,6 +25,18 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
   const todos = useContext(TodosContext);
   const project = todos.items.filter(el => el.id == projectId)[0];
 
+  function formatDate(date: Date) {
+    return `${
+      date.getDate().toString().length > 1
+        ? date.getDate()
+        : `0${date.getDate()}`
+    }.${
+      date.getMonth().toString().length > 1
+        ? date.getMonth() + 1
+        : `0${date.getMonth() + 1}`
+    }.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -35,8 +47,13 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
 
       <ScrollView style={{paddingHorizontal: 10}}>
         <StyledText>{project.description}</StyledText>
+        <StyledText>{`${formatDate(project.datetime)}`}</StyledText>
         <MyButton
-          containerStyles={{marginTop: 20}}
+          containerStyles={{
+            marginTop: 20,
+            backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+          }}
+          textStyles={{color: 'white'}}
           onPress={() => {
             todos.deleteProject(project.id);
             navigation.goBack();
