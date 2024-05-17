@@ -17,6 +17,7 @@ import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
 import {NavigationProp} from '@react-navigation/native';
+import Checkbox from './Checkbox';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -84,6 +85,14 @@ export default function ListTile({navigation, project}: Props) {
                 : colors.lightGray,
             },
           ]}>
+          <Checkbox
+            value={project.completed}
+            style={{
+              backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
+              borderRadius: 5,
+            }}
+            onChanged={() => todos.toggleProjectCompletion(project.id)}
+          />
           <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
             {project.name}
           </StyledText>
@@ -97,6 +106,8 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     borderRadius: 10,
-    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 15,
   },
 });

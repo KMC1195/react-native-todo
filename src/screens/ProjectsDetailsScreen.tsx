@@ -3,14 +3,16 @@ import {
   SafeAreaView,
   useColorScheme,
   ScrollView,
+  View,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {TodosContext} from '../store/todos_context';
 import {colors} from '../theme/colors';
 import Header from '../components/Header';
 import StyledText from '../components/StyledText';
 import MyButton from '../components/MyButton';
+import Checkbox from '../components/Checkbox';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -48,6 +50,22 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
       <ScrollView style={{paddingHorizontal: 10}}>
         <StyledText>{project.description}</StyledText>
         <StyledText>{`${formatDate(project.datetime)}`}</StyledText>
+
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            marginTop: 10,
+          }}>
+          <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+            Completed
+          </StyledText>
+          <Checkbox
+            value={project.completed}
+            onChanged={() => todos.toggleProjectCompletion(project.id)}
+          />
+        </View>
+
         <MyButton
           containerStyles={{
             marginTop: 20,

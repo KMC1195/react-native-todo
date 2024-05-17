@@ -17,6 +17,7 @@ export const TodosContext = createContext({
     },
   ],
   deleteProject: (projectId: number) => {},
+  toggleProjectCompletion: (projectId: number) => {},
   addProject: (newProject: Project) => {},
 });
 
@@ -39,7 +40,7 @@ export default function TodosContextProvder({children}: Props) {
     {
       name: 'Test 2',
       description: 'Desc',
-      completed: false,
+      completed: true,
       datetime: new Date(),
       id: 1,
       tasks: [],
@@ -67,10 +68,22 @@ export default function TodosContextProvder({children}: Props) {
     setItems(temporaryItems);
   }
 
+  function toggleProjectCompletion(projectId: number) {
+    const projectIndex = items.findIndex(el => el.id === projectId);
+    const updatedItems = items.map((item, index) =>
+      index === projectIndex
+        ? {...item, completed: !items[index].completed}
+        : item,
+    );
+
+    setItems(updatedItems);
+  }
+
   const valueObject = {
-    items: items,
+    items,
     deleteProject,
     addProject,
+    toggleProjectCompletion,
   };
   return (
     <TodosContext.Provider value={valueObject}>
