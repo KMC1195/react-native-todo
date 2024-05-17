@@ -3,7 +3,7 @@ import React, {useContext, useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
 import MyTextInput from '../components/MyTextInput';
-import ListTile from '../components/ListTile';
+import ListTile from '../components/ProjectListTile';
 import {TodosContext} from '../store/todos_context';
 import StyledText from '../components/StyledText';
 import FAB from '../components/FAB';

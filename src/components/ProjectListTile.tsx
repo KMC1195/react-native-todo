@@ -24,7 +24,7 @@ interface Props {
   project: Project;
 }
 
-export default function ListTile({navigation, project}: Props) {
+export default function ProjectListTile({navigation, project}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
   const todos = useContext(TodosContext);

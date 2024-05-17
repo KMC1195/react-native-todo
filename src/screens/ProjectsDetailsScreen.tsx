@@ -13,6 +13,8 @@ import Header from '../components/Header';
 import StyledText from '../components/StyledText';
 import MyButton from '../components/MyButton';
 import Checkbox from '../components/Checkbox';
+import ListTile from '../components/ProjectListTile';
+import TaskListTile from '../components/TaskListTile';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -47,9 +49,18 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
       }}>
       <Header navigation={navigation} title={project.name} />
 
-      <ScrollView style={{paddingHorizontal: 10}}>
+      <ScrollView
+        style={{paddingHorizontal: 10}}
+        showsVerticalScrollIndicator={false}>
         <StyledText>{project.description}</StyledText>
-        <StyledText>{`${formatDate(project.datetime)}`}</StyledText>
+
+        <StyledText
+          styles={{
+            marginTop: 15,
+            fontFamily: 'Poppins-SemiBold',
+          }}>
+          Date: {`${formatDate(project.datetime)}`}
+        </StyledText>
 
         <View
           style={{
@@ -78,6 +89,27 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
           }}>
           Delete project
         </MyButton>
+
+        <View style={{marginTop: 30}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}>
+            <StyledText styles={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>
+              Tasks:
+            </StyledText>
+            <MyButton onPress={() => {}} containerStyles={{padding: 5}}>
+              Add task
+            </MyButton>
+          </View>
+
+          {project.tasks.map((item, index) => (
+            <TaskListTile task={item} key={item.id} />
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

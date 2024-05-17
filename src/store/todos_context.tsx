@@ -52,7 +52,23 @@ export default function TodosContextProvder({children}: Props) {
       completed: false,
       datetime: new Date(),
       id: 2,
-      tasks: [],
+      tasks: [
+        {
+          name: 'Walk the dog',
+          id: 0,
+          completed: false,
+        },
+        {
+          name: 'Wash the dishes',
+          id: 1,
+          completed: true,
+        },
+        {
+          name: 'Mow the yard',
+          id: 2,
+          completed: true,
+        },
+      ],
     },
   ]);
 
