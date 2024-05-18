@@ -15,6 +15,7 @@ import MyButton from '../components/MyButton';
 import Checkbox from '../components/Checkbox';
 import ListTile from '../components/ProjectListTile';
 import TaskListTile from '../components/TaskListTile';
+import AddTaskPopup from '../components/AddTaskPopup';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -22,6 +23,8 @@ interface Props {
 }
 
 export default function ProjectsDetailsScreen({route, navigation}: Props) {
+  const [addTaskPopupVisible, setAddTaskPopupVisible] = useState(false);
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const projectId = route.params?.projectId;
@@ -50,76 +53,85 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
   }
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: isDarkMode ? colors.darkGray : 'white',
-        flex: 1,
-      }}>
-      <Header navigation={navigation} title={project.name} />
+    <>
+      <SafeAreaView
+        style={{
+          backgroundColor: isDarkMode ? colors.darkGray : 'white',
+          flex: 1,
+        }}>
+        <Header navigation={navigation} title={project.name} />
 
-      <ScrollView
-        style={{paddingHorizontal: 10}}
-        showsVerticalScrollIndicator={false}>
-        <StyledText>{project.description}</StyledText>
+        <ScrollView
+          style={{paddingHorizontal: 10}}
+          showsVerticalScrollIndicator={false}>
+          <StyledText>{project.description}</StyledText>
 
-        <StyledText
-          styles={{
-            marginTop: 15,
-            fontFamily: 'Poppins-SemiBold',
-          }}>
-          Date: {`${formatDate(project.datetime)}`}
-        </StyledText>
-
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            marginTop: 10,
-          }}>
-          <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
-            Completed
+          <StyledText
+            styles={{
+              marginTop: 15,
+              fontFamily: 'Poppins-SemiBold',
+            }}>
+            Date: {`${formatDate(project.datetime)}`}
           </StyledText>
-          <Checkbox
-            value={project.completed}
-            onChanged={() => todos.toggleProjectCompletion(project.id)}
-          />
-        </View>
 
-        <MyButton
-          containerStyles={{
-            marginTop: 20,
-            backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
-          }}
-          textStyles={{color: 'white'}}
-          onPress={() => {
-            todos.deleteProject(project.id);
-            navigation.goBack();
-          }}>
-          Delete project
-        </MyButton>
-
-        <View style={{marginTop: 30}}>
           <View
             style={{
-              flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 10,
+              flexDirection: 'row',
+              marginTop: 10,
             }}>
-            <StyledText styles={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>
-              Tasks:
+            <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+              Completed
             </StyledText>
-            <MyButton onPress={() => {}} containerStyles={{padding: 5}}>
-              Add task
-            </MyButton>
+            <Checkbox
+              value={project.completed}
+              onChanged={() => todos.toggleProjectCompletion(project.id)}
+            />
           </View>
 
-          {project.tasks.map((item, index) => (
-            <TaskListTile task={item} key={item.id} project={project} />
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <MyButton
+            containerStyles={{
+              marginTop: 20,
+              backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+            }}
+            textStyles={{color: 'white'}}
+            onPress={() => {
+              todos.deleteProject(project.id);
+              navigation.goBack();
+            }}>
+            Delete project
+          </MyButton>
+
+          <View style={{marginTop: 30}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <StyledText
+                styles={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>
+                Tasks:
+              </StyledText>
+              <MyButton
+                onPress={() => setAddTaskPopupVisible(true)}
+                containerStyles={{padding: 5}}>
+                Add task
+              </MyButton>
+            </View>
+
+            {project.tasks.map((item, index) => (
+              <TaskListTile task={item} key={item.id} project={project} />
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+
+      {addTaskPopupVisible && (
+        <AddTaskPopup setPopupOpen={setAddTaskPopupVisible} />
+      )}
+    </>
   );
 }
 
