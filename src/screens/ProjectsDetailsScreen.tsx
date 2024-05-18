@@ -107,7 +107,7 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
           </View>
 
           {project.tasks.map((item, index) => (
-            <TaskListTile task={item} key={item.id} />
+            <TaskListTile task={item} key={item.id} project={project} />
           ))}
         </View>
       </ScrollView>

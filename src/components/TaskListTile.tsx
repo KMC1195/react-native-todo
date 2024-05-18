@@ -8,20 +8,23 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {Task} from '../models/todos_models';
+import {Project, Task} from '../models/todos_models';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
 import Checkbox from './Checkbox';
 
 interface Props {
+  project: Project;
   task: Task;
 }
 
-export default function TaskListTile({task}: Props) {
+export default function TaskListTile({project, task}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
   const todos = useContext(TodosContext);
+
+  const projectIndex = todos.items.findIndex(el => el.id === project.id);
 
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
@@ -45,7 +48,7 @@ export default function TaskListTile({task}: Props) {
 
   function onListTileDelete() {
     itemHeight.value = withTiming(0, {duration: 300}, () => {
-      runOnJS(todos.deleteProject)(task.id);
+      runOnJS(todos.deleteTask)(projectIndex, task.id);
     });
     itemMarginBottom.value = withTiming(0, {duration: 300});
   }
