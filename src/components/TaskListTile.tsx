@@ -78,9 +78,13 @@ export default function TaskListTile({project, task}: Props) {
             backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
             borderRadius: 5,
           }}
-          onChanged={() => {}}
+          onChanged={() => todos.toggleTaskCompletion(projectIndex, task.id)}
         />
-        <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+        <StyledText
+          styles={{
+            fontFamily: 'Poppins-SemiBold',
+            textDecorationLine: task.completed ? 'line-through' : 'none',
+          }}>
           {task.name}
         </StyledText>
       </Animated.View>

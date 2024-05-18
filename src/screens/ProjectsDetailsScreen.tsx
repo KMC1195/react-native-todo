@@ -38,7 +38,15 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
       date.getMonth().toString().length > 1
         ? date.getMonth() + 1
         : `0${date.getMonth() + 1}`
-    }.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+    }.${date.getFullYear()} ${
+      date.getHours().toString().length > 1
+        ? date.getHours()
+        : `0${date.getHours()}`
+    }:${
+      date.getMinutes().toString().length > 1
+        ? date.getMinutes()
+        : `0${date.getMinutes()}`
+    }`;
   }
 
   return (

@@ -1,5 +1,5 @@
 import {ReactNode, createContext, useState} from 'react';
-import {Project} from '../models/todos_models';
+import {Project, Task} from '../models/todos_models';
 
 interface Props {
   children: ReactNode;
@@ -20,6 +20,7 @@ export const TodosContext = createContext({
   toggleProjectCompletion: (projectId: number) => {},
   addProject: (newProject: Project) => {},
   deleteTask: (projectIndex: number, taskIndex: number) => {},
+  toggleTaskCompletion: (projectIndex: number, taskIndex: number) => {},
 });
 
 export default function TodosContextProvder({children}: Props) {
@@ -32,7 +33,7 @@ export default function TodosContextProvder({children}: Props) {
       id: 0,
       tasks: [
         {
-          name: '',
+          name: 'Feed the dog',
           completed: false,
           id: 0,
         },
@@ -99,11 +100,24 @@ export default function TodosContextProvder({children}: Props) {
   function deleteTask(projectIndex: number, taskId: number) {
     let temporaryItems = items.map(item => item);
     let currentTasks = temporaryItems[projectIndex].tasks;
-    // const taskIndex = currentTasks.findIndex(el => el.id === taskId);
     currentTasks = currentTasks.filter(el => el.id !== taskId);
     temporaryItems = temporaryItems.map((item, index) =>
       index === projectIndex ? {...item, tasks: currentTasks} : item,
     );
+    setItems(temporaryItems);
+  }
+
+  function toggleTaskCompletion(projectIndex: number, taskId: number) {
+    let currentTasks = items[projectIndex].tasks.map(item => item);
+
+    const updatedTasks = currentTasks.map((item, index) =>
+      item.id === taskId ? {...item, completed: !item.completed} : item,
+    );
+
+    const temporaryItems = items.map((item, index) =>
+      index === projectIndex ? {...item, tasks: updatedTasks} : item,
+    );
+
     setItems(temporaryItems);
   }
 
@@ -113,6 +127,7 @@ export default function TodosContextProvder({children}: Props) {
     addProject,
     toggleProjectCompletion,
     deleteTask,
+    toggleTaskCompletion,
   };
   return (
     <TodosContext.Provider value={valueObject}>

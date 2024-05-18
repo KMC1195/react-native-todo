@@ -93,7 +93,11 @@ export default function ProjectListTile({navigation, project}: Props) {
             }}
             onChanged={() => todos.toggleProjectCompletion(project.id)}
           />
-          <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
+          <StyledText
+            styles={{
+              fontFamily: 'Poppins-SemiBold',
+              textDecorationLine: project.completed ? 'line-through' : 'none',
+            }}>
             {project.name}
           </StyledText>
         </Animated.View>
