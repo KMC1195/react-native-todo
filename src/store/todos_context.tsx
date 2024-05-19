@@ -18,9 +18,10 @@ export const TodosContext = createContext({
   ],
   deleteProject: (projectId: number) => {},
   toggleProjectCompletion: (projectId: number) => {},
-  addProject: (newProject: Project) => {},
+  createProject: (newProject: Project) => {},
   deleteTask: (projectIndex: number, taskIndex: number) => {},
   toggleTaskCompletion: (projectIndex: number, taskIndex: number) => {},
+  createTask: (projectId: number, newItem: Task) => {},
 });
 
 export default function TodosContextProvder({children}: Props) {
@@ -80,7 +81,7 @@ export default function TodosContextProvder({children}: Props) {
     setItems(temporaryItems);
   }
 
-  function addProject(newProject: Project) {
+  function createProject(newProject: Project) {
     let temporaryItems = [...items];
     temporaryItems.push(newProject);
     setItems(temporaryItems);
@@ -121,13 +122,27 @@ export default function TodosContextProvder({children}: Props) {
     setItems(temporaryItems);
   }
 
+  function createTask(projectId: number, newItem: Task) {
+    const index = items.findIndex(el => el.id === projectId);
+
+    const currentTasks = items[index].tasks.map(item => item);
+    currentTasks.push(newItem);
+
+    const temporaryItems = items.map(item =>
+      item.id === projectId ? {...item, tasks: currentTasks} : item,
+    );
+
+    setItems(temporaryItems);
+  }
+
   const valueObject = {
     items,
     deleteProject,
-    addProject,
+    createProject,
     toggleProjectCompletion,
     deleteTask,
     toggleTaskCompletion,
+    createTask,
   };
   return (
     <TodosContext.Provider value={valueObject}>

@@ -1,18 +1,34 @@
 import {Pressable, StyleSheet, View, useColorScheme} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {colors} from '../theme/colors';
 import StyledText from './StyledText';
 import MyTextInput from './MyTextInput';
 import MyButton from './MyButton';
+import {TodosContext} from '../store/todos_context';
 
 interface Props {
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  projectId: number;
 }
 
-export default function AddTaskPopup({setPopupOpen}: Props) {
+export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
+  const todo = useContext(TodosContext);
+
   const [name, setName] = useState('');
+
+  function addTask() {
+    const newTask = {
+      name,
+      id: Math.random(),
+      completed: false,
+    };
+
+    todo.createTask(projectId, newTask);
+
+    setPopupOpen(false);
+  }
 
   return (
     <Pressable style={styles.container} onPress={() => setPopupOpen(false)}>
@@ -30,8 +46,11 @@ export default function AddTaskPopup({setPopupOpen}: Props) {
           placeholder="Enter task's name"
         />
         <MyButton
-          onPress={() => {}}
-          containerStyles={{alignSelf: 'flex-end', paddingHorizontal: 20}}>
+          onPress={addTask}
+          containerStyles={{
+            alignSelf: 'flex-end',
+            paddingHorizontal: 20,
+          }}>
           Add
         </MyButton>
       </View>
@@ -55,5 +74,6 @@ const styles = StyleSheet.create({
     padding: 15,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    gap: 10,
   },
 });

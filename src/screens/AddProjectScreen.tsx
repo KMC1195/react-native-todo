@@ -66,7 +66,7 @@ export default function AddProjectScreen({navigation}: Props) {
       tasks: [],
     };
 
-    todos.addProject(newProject);
+    todos.createProject(newProject);
     navigation.goBack();
   }
 

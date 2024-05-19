@@ -121,15 +121,24 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
               </MyButton>
             </View>
 
-            {project.tasks.map((item, index) => (
-              <TaskListTile task={item} key={item.id} project={project} />
-            ))}
+            {project.tasks.length > 0 ? (
+              project.tasks.map((item, index) => (
+                <TaskListTile task={item} key={item.id} project={project} />
+              ))
+            ) : (
+              <StyledText>
+                There are no tasks yet. Click "Add task" to create one!
+              </StyledText>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
 
       {addTaskPopupVisible && (
-        <AddTaskPopup setPopupOpen={setAddTaskPopupVisible} />
+        <AddTaskPopup
+          setPopupOpen={setAddTaskPopupVisible}
+          projectId={project.id}
+        />
       )}
     </>
   );
