@@ -4,6 +4,7 @@ import {
   useColorScheme,
   ScrollView,
   View,
+  Pressable,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
@@ -13,9 +14,9 @@ import Header from '../components/Header';
 import StyledText from '../components/StyledText';
 import MyButton from '../components/MyButton';
 import Checkbox from '../components/Checkbox';
-import ListTile from '../components/ProjectListTile';
 import TaskListTile from '../components/TaskListTile';
 import AddTaskPopup from '../components/AddTaskPopup';
+import {PencilIcon, PencilSquareIcon} from 'react-native-heroicons/outline';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -59,7 +60,26 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
           backgroundColor: isDarkMode ? colors.darkGray : 'white',
           flex: 1,
         }}>
-        <Header navigation={navigation} title={project.name} />
+        <Header
+          navigation={navigation}
+          title={project.name}
+          trailing={
+            <Pressable
+              onPress={() => {
+                navigation.navigate({
+                  name: 'EditProjectScreen',
+                  params: {
+                    projectId: project.id,
+                  },
+                });
+              }}>
+              <PencilSquareIcon
+                color={isDarkMode ? 'white' : colors.darkGray}
+                strokeWidth={2}
+              />
+            </Pressable>
+          }
+        />
 
         <ScrollView
           style={{paddingHorizontal: 10}}

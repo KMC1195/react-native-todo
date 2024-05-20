@@ -1,5 +1,5 @@
 import {ReactNode, createContext, useState} from 'react';
-import {Project, Task} from '../models/todos_models';
+import {Project, Task, editedProjectData} from '../models/todos_models';
 
 interface Props {
   children: ReactNode;
@@ -22,6 +22,7 @@ export const TodosContext = createContext({
   deleteTask: (projectIndex: number, taskIndex: number) => {},
   toggleTaskCompletion: (projectIndex: number, taskIndex: number) => {},
   createTask: (projectId: number, newItem: Task) => {},
+  editProject: (projectId: number, newData: editedProjectData) => {},
 });
 
 export default function TodosContextProvder({children}: Props) {
@@ -98,6 +99,21 @@ export default function TodosContextProvder({children}: Props) {
     setItems(updatedItems);
   }
 
+  function editProject(projectId: number, newData: editedProjectData) {
+    const temporaryItems = items.map(item =>
+      item.id === projectId
+        ? {
+            ...item,
+            name: newData.name,
+            description: newData.description,
+            datetime: newData.datetime,
+          }
+        : item,
+    );
+
+    setItems(temporaryItems);
+  }
+
   function deleteTask(projectIndex: number, taskId: number) {
     let temporaryItems = items.map(item => item);
     let currentTasks = temporaryItems[projectIndex].tasks;
@@ -140,6 +156,7 @@ export default function TodosContextProvder({children}: Props) {
     deleteProject,
     createProject,
     toggleProjectCompletion,
+    editProject,
     deleteTask,
     toggleTaskCompletion,
     createTask,

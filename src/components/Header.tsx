@@ -1,16 +1,17 @@
 import {View, Pressable, useColorScheme} from 'react-native';
 import {ArrowLeftIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
 
 interface Props {
   navigation: NavigationProp<any, any>;
   title: string;
+  trailing?: ReactNode;
 }
 
-export default function Header({navigation, title}: Props) {
+export default function Header({navigation, title, trailing}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -18,17 +19,20 @@ export default function Header({navigation, title}: Props) {
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 15,
+        justifyContent: 'space-between',
         padding: 5,
       }}>
-      <Pressable onPress={() => navigation.goBack()}>
-        <ArrowLeftIcon
-          color={isDarkMode ? 'white' : colors.darkGray}
-          strokeWidth={2.5}
-          size={25}
-        />
-      </Pressable>
-      <StyledText styles={{fontSize: 30}}>{title}</StyledText>
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 15}}>
+        <Pressable onPress={() => navigation.goBack()}>
+          <ArrowLeftIcon
+            color={isDarkMode ? 'white' : colors.darkGray}
+            strokeWidth={2.5}
+            size={25}
+          />
+        </Pressable>
+        <StyledText styles={{fontSize: 30}}>{title}</StyledText>
+      </View>
+      {trailing ? trailing : ''}
     </View>
   );
 }

@@ -12,3 +12,9 @@ export interface Project {
   id: number;
   tasks: Task[];
 }
+
+export interface editedProjectData {
+  name: string;
+  description: string;
+  datetime: Date;
+}

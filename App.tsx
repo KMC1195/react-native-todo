@@ -6,6 +6,7 @@ import AddProjectScreen from './src/screens/AddProjectScreen';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import TodosContextProvder from './src/store/todos_context';
 import ProjectsDetailsScreen from './src/screens/ProjectsDetailsScreen';
+import EditProjectScreen from './src/screens/EditProjectScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,10 @@ export default function App() {
             <Stack.Screen
               name="ProjectsDetailsScreen"
               component={ProjectsDetailsScreen}
+            />
+            <Stack.Screen
+              name="EditProjectScreen"
+              component={EditProjectScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
