@@ -60,8 +60,28 @@ export default function EditProjectScreen({route, navigation}: Props) {
   useEffect(() => {
     setName(project.name);
     setDescription(project.description);
-    setDate(project.datetime);
+    setDate(new Date(project.datetime));
   }, []);
+
+  function formatDate(date: Date) {
+    return `${
+      date.getDate().toString().length > 1
+        ? date.getDate()
+        : `0${date.getDate()}`
+    }.${
+      date.getMonth().toString().length > 1
+        ? date.getMonth() + 1
+        : `0${date.getMonth() + 1}`
+    }.${date.getFullYear()} ${
+      date.getHours().toString().length > 1
+        ? date.getHours()
+        : `0${date.getHours()}`
+    }:${
+      date.getMinutes().toString().length > 1
+        ? date.getMinutes()
+        : `0${date.getMinutes()}`
+    }`;
+  }
 
   return (
     <SafeAreaView
@@ -74,54 +94,63 @@ export default function EditProjectScreen({route, navigation}: Props) {
       <ScrollView
         style={{paddingHorizontal: 10}}
         showsVerticalScrollIndicator={false}>
-        <View>
-          <StyledText>Title</StyledText>
-          <MyTextInput value={name} setValue={setName} />
+        <View style={{marginBottom: 10}}>
+          <View>
+            <StyledText>Title</StyledText>
+            <MyTextInput value={name} setValue={setName} />
+          </View>
+          <View style={{marginTop: 20}}>
+            <StyledText>Description</StyledText>
+            <MyTextInput
+              multiline={true}
+              value={description}
+              setValue={setDescription}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: 30,
+            }}>
+            <MyButton onPress={showDatePicker}>Choose date</MyButton>
+            <MyButton onPress={showTimePicker}>Choose time</MyButton>
+          </View>
+
+          {show && (
+            <DateTimePicker
+              value={date}
+              mode={mode}
+              display="spinner"
+              is24Hour={true}
+              onChange={onChange}
+            />
+          )}
+
+          <StyledText
+            styles={{
+              fontFamily: 'Poppins-SemiBold',
+              marginTop: 20,
+              alignSelf: 'center',
+            }}>
+            {`${formatDate(date)}`}
+          </StyledText>
+
+          <MyButton
+            onPress={() => {
+              const newData = {
+                name,
+                description,
+                datetime: date,
+              };
+
+              todos.editProject(project.id, newData);
+              navigation.goBack();
+            }}
+            containerStyles={{marginTop: 20}}>
+            Edit project
+          </MyButton>
         </View>
-        <View style={{marginTop: 20}}>
-          <StyledText>Description</StyledText>
-          <MyTextInput
-            multiline={true}
-            value={description}
-            setValue={setDescription}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            marginTop: 30,
-          }}>
-          <MyButton onPress={showDatePicker}>Choose date</MyButton>
-          <MyButton onPress={showTimePicker}>Choose time</MyButton>
-        </View>
-
-        {show && (
-          <DateTimePicker
-            value={date}
-            mode={mode}
-            display="spinner"
-            is24Hour={true}
-            onChange={onChange}
-          />
-        )}
-
-        <StyledText>{`${date}`}</StyledText>
-
-        <MyButton
-          onPress={() => {
-            const newData = {
-              name,
-              description,
-              datetime: date,
-            };
-
-            todos.editProject(project.id, newData);
-            navigation.goBack();
-          }}
-          containerStyles={{marginTop: 20}}>
-          Edit project
-        </MyButton>
       </ScrollView>
     </SafeAreaView>
   );

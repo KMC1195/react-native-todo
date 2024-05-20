@@ -1,5 +1,9 @@
-import {ReactNode, createContext, useState} from 'react';
+import {ReactNode, createContext, useEffect, useState} from 'react';
 import {Project, Task, editedProjectData} from '../models/todos_models';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
+
+const STORAGE_KEY = 'items';
 
 interface Props {
   children: ReactNode;
@@ -26,66 +30,38 @@ export const TodosContext = createContext({
 });
 
 export default function TodosContextProvder({children}: Props) {
-  const [items, setItems] = useState([
-    {
-      name: 'Test 1',
-      description: 'Desc',
-      completed: false,
-      datetime: new Date(),
-      id: 0,
-      tasks: [
-        {
-          name: 'Feed the dog',
-          completed: false,
-          id: 0,
-        },
-      ],
-    },
-    {
-      name: 'Test 2',
-      description: 'Desc',
-      completed: true,
-      datetime: new Date(),
-      id: 1,
-      tasks: [],
-    },
-    {
-      name: 'Test 3',
-      description:
-        'Et excepteur nisi nisi deserunt excepteur laborum duis. In velit consequat ut esse enim voluptate do. Officia ullamco non fugiat ad deserunt quis elit. Ullamco reprehenderit veniam tempor consectetur mollit consequat reprehenderit do. Esse do ea culpa nulla eiusmod Lorem incididunt sunt aute consequat aliquip labore sunt tempor.',
-      completed: false,
-      datetime: new Date(),
-      id: 2,
-      tasks: [
-        {
-          name: 'Walk the dog',
-          id: 0,
-          completed: false,
-        },
-        {
-          name: 'Wash the dishes',
-          id: 1,
-          completed: true,
-        },
-        {
-          name: 'Mow the yard',
-          id: 2,
-          completed: true,
-        },
-      ],
-    },
-  ]);
+  const [items, setItems] = useState<Project[]>([]);
+
+  const getData = async () => {
+    try {
+      const items = await AsyncStorage.getItem(STORAGE_KEY);
+      if (items !== null) {
+        const JSONItems = JSON.parse(items ? items : '');
+        setItems(JSONItems);
+      } else {
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   function deleteProject(projectId: number) {
     let temporaryItems = [...items];
     temporaryItems = temporaryItems.filter(el => el.id !== projectId);
     setItems(temporaryItems);
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function createProject(newProject: Project) {
     let temporaryItems = [...items];
     temporaryItems.push(newProject);
     setItems(temporaryItems);
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function toggleProjectCompletion(projectId: number) {
@@ -97,6 +73,8 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(updatedItems);
+
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedItems));
   }
 
   function editProject(projectId: number, newData: editedProjectData) {
@@ -112,6 +90,8 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(temporaryItems);
+
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function deleteTask(projectIndex: number, taskId: number) {
@@ -122,6 +102,8 @@ export default function TodosContextProvder({children}: Props) {
       index === projectIndex ? {...item, tasks: currentTasks} : item,
     );
     setItems(temporaryItems);
+
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function toggleTaskCompletion(projectIndex: number, taskId: number) {
@@ -136,6 +118,8 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(temporaryItems);
+
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function createTask(projectId: number, newItem: Task) {
@@ -149,6 +133,8 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(temporaryItems);
+
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   const valueObject = {

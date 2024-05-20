@@ -91,7 +91,7 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
               marginTop: 15,
               fontFamily: 'Poppins-SemiBold',
             }}>
-            Date: {`${formatDate(project.datetime)}`}
+            Date: {`${formatDate(new Date(project.datetime))}`}
           </StyledText>
 
           <View
