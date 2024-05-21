@@ -97,8 +97,13 @@ export default function ProjectListTile({navigation, project}: Props) {
             styles={{
               fontFamily: 'Poppins-SemiBold',
               textDecorationLine: project.completed ? 'line-through' : 'none',
+              flex: 1,
+              flexWrap: 'nowrap',
+              overflow: 'hidden',
             }}>
-            {project.name}
+            {project.name.length > 24
+              ? project.name.slice(1) + '...'
+              : project.name}
           </StyledText>
         </Animated.View>
       </GestureDetector>

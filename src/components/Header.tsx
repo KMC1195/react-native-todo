@@ -30,7 +30,15 @@ export default function Header({navigation, title, trailing}: Props) {
             size={25}
           />
         </Pressable>
-        <StyledText styles={{fontSize: 30}}>{title}</StyledText>
+        <StyledText
+          styles={{
+            fontSize: 30,
+            width: '80%',
+            flexWrap: 'nowrap',
+            overflow: 'hidden',
+          }}>
+          {title.length > 15 ? title.slice(title.length - 15) + '...' : title}
+        </StyledText>
       </View>
       {trailing ? trailing : ''}
     </View>

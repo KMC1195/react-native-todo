@@ -84,8 +84,11 @@ export default function TaskListTile({project, task}: Props) {
           styles={{
             fontFamily: 'Poppins-SemiBold',
             textDecorationLine: task.completed ? 'line-through' : 'none',
+            flex: 1,
+            flexWrap: 'nowrap',
+            overflow: 'hidden',
           }}>
-          {task.name}
+          {task.name.length > 24 ? task.name.slice(1) + '...' : task.name}
         </StyledText>
       </Animated.View>
     </Swipeable>

@@ -19,6 +19,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import {TodosContext} from '../store/todos_context';
 import Header from '../components/Header';
+import SnackBar from '../components/SnackBar';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -30,6 +31,7 @@ export default function AddProjectScreen({navigation}: Props) {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [snackBarShown, setSnackBarShown] = useState(false);
 
   // Datetimepicker logic
   const [date, setDate] = useState(new Date());
@@ -77,83 +79,96 @@ export default function AddProjectScreen({navigation}: Props) {
 
   // Adding project logic
   function addProject() {
-    const newProject = {
-      name,
-      description,
-      datetime: date,
-      completed: false,
-      id: Math.random(),
-      tasks: [],
-    };
+    if (!name) {
+      setSnackBarShown(true);
 
-    todos.createProject(newProject);
-    navigation.goBack();
+      setTimeout(() => setSnackBarShown(false), 2500);
+    } else {
+      const newProject = {
+        name,
+        description,
+        datetime: date,
+        completed: false,
+        id: Math.random(),
+        tasks: [],
+      };
+
+      todos.createProject(newProject);
+      navigation.goBack();
+    }
   }
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: isDarkMode ? colors.darkGray : 'white',
-        flex: 1,
-      }}>
-      <ScrollView
-        style={{paddingHorizontal: 10, flex: 1}}
-        showsVerticalScrollIndicator={false}>
-        <Header navigation={navigation} title="Add Project" />
-
-        <View
-          style={{
-            marginTop: 20,
-            marginBottom: 10,
-          }}>
-          <View>
-            <StyledText>Title:</StyledText>
-            <MyTextInput
-              placeholder="Enter a title..."
-              value={name}
-              setValue={setName}
-            />
-          </View>
-          <View style={{marginTop: 20}}>
-            <StyledText>Description:</StyledText>
-            <MyTextInput
-              placeholder="Enter a title..."
-              multiline
-              value={description}
-              setValue={setDescription}
-            />
-          </View>
+    <>
+      <SafeAreaView
+        style={{
+          backgroundColor: isDarkMode ? colors.darkGray : 'white',
+          flex: 1,
+        }}>
+        <ScrollView
+          style={{paddingHorizontal: 10, flex: 1}}
+          showsVerticalScrollIndicator={false}>
+          <Header navigation={navigation} title="Add Project" />
 
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: 30,
+              marginTop: 20,
+              marginBottom: 10,
             }}>
-            <MyButton onPress={showDatePicker}>Choose date</MyButton>
-            <MyButton onPress={showTimePicker}>Choose time</MyButton>
+            <View>
+              <StyledText>Title:</StyledText>
+              <MyTextInput
+                placeholder="Enter a title..."
+                value={name}
+                setValue={setName}
+              />
+            </View>
+            <View style={{marginTop: 20}}>
+              <StyledText>Description:</StyledText>
+              <MyTextInput
+                placeholder="Enter a title..."
+                multiline
+                value={description}
+                setValue={setDescription}
+              />
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: 30,
+              }}>
+              <MyButton onPress={showDatePicker}>Choose date</MyButton>
+              <MyButton onPress={showTimePicker}>Choose time</MyButton>
+            </View>
+
+            {show && (
+              <DateTimePicker
+                value={date}
+                mode={mode}
+                display="spinner"
+                is24Hour={true}
+                onChange={onChange}
+              />
+            )}
+
+            <StyledText
+              styles={{fontFamily: 'Poppins-SemiBold', alignSelf: 'center'}}>
+              {`${formatDate(date)}`}
+            </StyledText>
+
+            <MyButton onPress={addProject} containerStyles={{marginTop: 30}}>
+              Add
+            </MyButton>
           </View>
+        </ScrollView>
+      </SafeAreaView>
 
-          {show && (
-            <DateTimePicker
-              value={date}
-              mode={mode}
-              display="spinner"
-              is24Hour={true}
-              onChange={onChange}
-            />
-          )}
-
-          <StyledText
-            styles={{fontFamily: 'Poppins-SemiBold', alignSelf: 'center'}}>
-            {`${formatDate(date)}`}
-          </StyledText>
-
-          <MyButton onPress={addProject} containerStyles={{marginTop: 30}}>
-            Add
-          </MyButton>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <SnackBar
+        message="You can't create a project without a title"
+        isShown={snackBarShown}
+      />
+    </>
   );
 }
