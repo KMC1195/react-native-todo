@@ -1,5 +1,9 @@
 import {ReactNode, createContext, useEffect, useState} from 'react';
-import {Project, Task, editedProjectData} from '../models/todos_models';
+import {
+  TProjectProps,
+  TTaskProps,
+  TEditedProjectDataProps,
+} from '../types/Todos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 
@@ -22,15 +26,15 @@ export const TodosContext = createContext({
   ],
   deleteProject: (projectId: number) => {},
   toggleProjectCompletion: (projectId: number) => {},
-  createProject: (newProject: Project) => {},
+  createProject: (newProject: TProjectProps) => {},
   deleteTask: (projectIndex: number, taskIndex: number) => {},
   toggleTaskCompletion: (projectIndex: number, taskIndex: number) => {},
-  createTask: (projectId: number, newItem: Task) => {},
-  editProject: (projectId: number, newData: editedProjectData) => {},
+  createTask: (projectId: number, newItem: TTaskProps) => {},
+  editProject: (projectId: number, newData: TEditedProjectDataProps) => {},
 });
 
 export default function TodosContextProvder({children}: Props) {
-  const [items, setItems] = useState<Project[]>([]);
+  const [items, setItems] = useState<TProjectProps[]>([]);
 
   const getData = async () => {
     try {
@@ -57,7 +61,7 @@ export default function TodosContextProvder({children}: Props) {
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
-  function createProject(newProject: Project) {
+  function createProject(newProject: TProjectProps) {
     let temporaryItems = [...items];
     temporaryItems.push(newProject);
     setItems(temporaryItems);
@@ -77,7 +81,7 @@ export default function TodosContextProvder({children}: Props) {
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedItems));
   }
 
-  function editProject(projectId: number, newData: editedProjectData) {
+  function editProject(projectId: number, newData: TEditedProjectDataProps) {
     const temporaryItems = items.map(item =>
       item.id === projectId
         ? {
@@ -122,7 +126,7 @@ export default function TodosContextProvder({children}: Props) {
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
-  function createTask(projectId: number, newItem: Task) {
+  function createTask(projectId: number, newItem: TTaskProps) {
     const index = items.findIndex(el => el.id === projectId);
 
     const currentTasks = items[index].tasks.map(item => item);

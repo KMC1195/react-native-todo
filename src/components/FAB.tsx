@@ -13,14 +13,14 @@ export default function FAB({navigation}: Props) {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('AddProjectScreen')}
+      onPress={() => navigation.navigate('ProjectEditorScreen')}
       style={[
         styles.container,
         {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
       ]}>
       <PlusIcon
         size={30}
-        color={isDarkMode ? 'white' : colors.darkGray}
+        color={isDarkMode ? colors.white : colors.darkGray}
         strokeWidth={2.5}
       />
     </Pressable>

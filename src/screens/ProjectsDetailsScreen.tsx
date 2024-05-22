@@ -12,54 +12,39 @@ import {TodosContext} from '../store/todos_context';
 import {colors} from '../theme/colors';
 import Header from '../components/Header';
 import StyledText from '../components/StyledText';
-import MyButton from '../components/MyButton';
+import Button from '../components/Button';
 import Checkbox from '../components/Checkbox';
 import TaskListTile from '../components/TaskListTile';
 import AddTaskPopup from '../components/AddTaskPopup';
-import {PencilIcon, PencilSquareIcon} from 'react-native-heroicons/outline';
+import {PencilSquareIcon} from 'react-native-heroicons/outline';
+import {formatDate} from '../utils/formatDate';
 
-interface Props {
+interface IScreenProps {
   route: RouteProp<any, any>;
   navigation: NavigationProp<any, any>;
 }
 
-export default function ProjectsDetailsScreen({route, navigation}: Props) {
+export default function ProjectsDetailsScreen({
+  route,
+  navigation,
+}: IScreenProps) {
   const [addTaskPopupVisible, setAddTaskPopupVisible] = useState(false);
 
+  const todos = useContext(TodosContext);
   const isDarkMode = useColorScheme() === 'dark';
 
   const projectId = route.params?.projectId;
-
-  const todos = useContext(TodosContext);
   const project = todos.items.filter(el => el.id == projectId)[0];
-
-  function formatDate(date: Date) {
-    return `${
-      date.getDate().toString().length > 1
-        ? date.getDate()
-        : `0${date.getDate()}`
-    }.${
-      date.getMonth().toString().length > 1
-        ? date.getMonth() + 1
-        : `0${date.getMonth() + 1}`
-    }.${date.getFullYear()} ${
-      date.getHours().toString().length > 1
-        ? date.getHours()
-        : `0${date.getHours()}`
-    }:${
-      date.getMinutes().toString().length > 1
-        ? date.getMinutes()
-        : `0${date.getMinutes()}`
-    }`;
-  }
 
   return (
     <>
       <SafeAreaView
-        style={{
-          backgroundColor: isDarkMode ? colors.darkGray : 'white',
-          flex: 1,
-        }}>
+        style={[
+          {
+            backgroundColor: isDarkMode ? colors.darkGray : colors.white,
+          },
+          styles.safeAreaView,
+        ]}>
         <Header
           navigation={navigation}
           title={project.name}
@@ -67,14 +52,14 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
             <Pressable
               onPress={() => {
                 navigation.navigate({
-                  name: 'EditProjectScreen',
+                  name: 'ProjectEditorScreen',
                   params: {
                     projectId: project.id,
                   },
                 });
               }}>
               <PencilSquareIcon
-                color={isDarkMode ? 'white' : colors.darkGray}
+                color={isDarkMode ? colors.white : colors.darkGray}
                 strokeWidth={2}
               />
             </Pressable>
@@ -82,63 +67,47 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
         />
 
         <ScrollView
-          style={{paddingHorizontal: 10}}
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}>
           <StyledText>{project.description}</StyledText>
 
-          <StyledText
-            styles={{
-              marginTop: 15,
-              fontFamily: 'Poppins-SemiBold',
-            }}>
+          <StyledText textStyles={styles.dateText} weight="semiBold">
             Date: {`${formatDate(new Date(project.datetime))}`}
           </StyledText>
 
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              marginTop: 10,
-            }}>
-            <StyledText styles={{fontFamily: 'Poppins-SemiBold'}}>
-              Completed
-            </StyledText>
+          <View style={styles.completedCheckBoxContainer}>
+            <StyledText weight="semiBold">Completed</StyledText>
             <Checkbox
               value={project.completed}
               onChanged={() => todos.toggleProjectCompletion(project.id)}
             />
           </View>
 
-          <MyButton
-            containerStyles={{
-              marginTop: 20,
-              backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
-            }}
-            textStyles={{color: 'white'}}
+          <Button
+            containerStyles={[
+              {
+                backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+              },
+              styles.deleteButton,
+            ]}
+            textStyles={styles.deleteButtonText}
             onPress={() => {
               todos.deleteProject(project.id);
               navigation.goBack();
             }}>
             Delete project
-          </MyButton>
+          </Button>
 
-          <View style={{marginTop: 30}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}>
-              <StyledText
-                styles={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>
+          <View style={styles.showingTasksElementContainer}>
+            <View style={styles.tasksContainer}>
+              <StyledText textStyles={styles.tasksText} weight="semiBold">
                 Tasks:
               </StyledText>
-              <MyButton
+              <Button
                 onPress={() => setAddTaskPopupVisible(true)}
-                containerStyles={{padding: 5}}>
+                containerStyles={styles.addTaskButton}>
                 Add task
-              </MyButton>
+              </Button>
             </View>
 
             {project.tasks.length > 0 ? (
@@ -164,4 +133,38 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
+  scrollView: {
+    paddingHorizontal: 10,
+  },
+  dateText: {
+    marginTop: 15,
+  },
+  completedCheckBoxContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  deleteButton: {
+    marginTop: 20,
+  },
+  deleteButtonText: {
+    color: colors.white,
+  },
+  showingTasksElementContainer: {
+    marginTop: 30,
+  },
+  tasksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  tasksText: {fontSize: 30},
+  addTaskButton: {
+    padding: 5,
+  },
+});

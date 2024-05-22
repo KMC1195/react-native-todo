@@ -2,23 +2,22 @@ import {Pressable, StyleSheet, View, useColorScheme} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {colors} from '../theme/colors';
 import StyledText from './StyledText';
-import MyTextInput from './MyTextInput';
-import MyButton from './MyButton';
+import MyTextInput from './TextField';
+import MyButton from './Button';
 import {TodosContext} from '../store/todos_context';
 import SnackBar from './SnackBar';
 
-interface Props {
+interface IScreenProps {
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   projectId: number;
 }
 
-export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const todo = useContext(TodosContext);
-
+export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
   const [name, setName] = useState('');
   const [isSnackBarShown, setIsSnackBarShown] = useState(false);
+
+  const isDarkMode = useColorScheme() === 'dark';
+  const todo = useContext(TodosContext);
 
   function addTask() {
     if (!name) {
@@ -46,10 +45,10 @@ export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
           style={[
             styles.contentContainer,
             {
-              backgroundColor: isDarkMode ? colors.darkGray : 'white',
+              backgroundColor: isDarkMode ? colors.darkGray : colors.white,
             },
           ]}>
-          <StyledText styles={{fontSize: 30}}>Add task</StyledText>
+          <StyledText textStyles={styles.title}>Add task</StyledText>
           <MyTextInput
             value={name}
             setValue={setName}
@@ -91,4 +90,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 10,
   },
+  title: {fontSize: 30},
 });

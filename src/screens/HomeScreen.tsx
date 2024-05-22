@@ -1,33 +1,41 @@
-import {View, SafeAreaView, useColorScheme, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  useColorScheme,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
-import MyTextInput from '../components/MyTextInput';
+import MyTextInput from '../components/TextField';
 import ListTile from '../components/ProjectListTile';
 import {TodosContext} from '../store/todos_context';
 import StyledText from '../components/StyledText';
 import FAB from '../components/FAB';
 
-interface Props {
+interface IScreenProps {
   navigation: NavigationProp<any, any>;
 }
 
-export default function HomeScreen({navigation}: Props) {
+export default function HomeScreen({navigation}: IScreenProps) {
+  const [search, setSearch] = useState('');
+
   const isDarkMode = useColorScheme() === 'dark';
   const todos = useContext(TodosContext);
 
-  const [search, setSearch] = useState('');
-
   return (
     <SafeAreaView
-      style={{
-        backgroundColor: isDarkMode ? colors.darkGray : 'white',
-        flex: 1,
-      }}>
+      style={[
+        {
+          backgroundColor: isDarkMode ? colors.darkGray : colors.white,
+        },
+        styles.safeAreaView,
+      ]}>
       <ScrollView
-        style={{paddingHorizontal: 10}}
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
-        <StyledText styles={{fontSize: 70}}>ToDo</StyledText>
+        <StyledText textStyles={{fontSize: 70}}>ToDo</StyledText>
 
         <MyTextInput
           placeholder="Search..."
@@ -35,7 +43,7 @@ export default function HomeScreen({navigation}: Props) {
           setValue={setSearch}
         />
 
-        <View style={{marginTop: 30}}>
+        <View style={styles.projectsListContainer}>
           {todos.items
             .filter(el => el.name.toLowerCase().includes(search.toLowerCase()))
             .map(item => (
@@ -47,3 +55,15 @@ export default function HomeScreen({navigation}: Props) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+  },
+  scrollView: {
+    paddingHorizontal: 10,
+  },
+  projectsListContainer: {
+    marginTop: 30,
+  },
+});

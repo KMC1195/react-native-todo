@@ -8,26 +8,24 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {Project, Task} from '../models/todos_models';
+import {IProjectProps, ITaskProps} from '../types/Todos';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
 import Checkbox from './Checkbox';
 
 interface Props {
-  project: Project;
-  task: Task;
+  project: IProjectProps;
+  task: ITaskProps;
 }
 
 export default function TaskListTile({project, task}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
-
   const todos = useContext(TodosContext);
-
-  const projectIndex = todos.items.findIndex(el => el.id === project.id);
-
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
+
+  const projectIndex = todos.items.findIndex(el => el.id === project.id);
 
   function rightSwipe() {
     return (
@@ -41,7 +39,7 @@ export default function TaskListTile({project, task}: Props) {
           alignItems: 'flex-end',
           paddingHorizontal: 20,
         }}>
-        <TrashIcon color="white" strokeWidth={2} size={30} />
+        <TrashIcon color={colors.white} strokeWidth={2} size={30} />
       </View>
     );
   }
@@ -81,13 +79,13 @@ export default function TaskListTile({project, task}: Props) {
           onChanged={() => todos.toggleTaskCompletion(projectIndex, task.id)}
         />
         <StyledText
-          styles={{
-            fontFamily: 'Poppins-SemiBold',
-            textDecorationLine: task.completed ? 'line-through' : 'none',
-            flex: 1,
-            flexWrap: 'nowrap',
-            overflow: 'hidden',
-          }}>
+          weight="semiBold"
+          textStyles={[
+            styles.text,
+            {
+              textDecorationLine: task.completed ? 'line-through' : 'none',
+            },
+          ]}>
           {task.name.length > 24 ? task.name.slice(1) + '...' : task.name}
         </StyledText>
       </Animated.View>
@@ -102,5 +100,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 15,
+  },
+  text: {
+    flex: 1,
+    flexWrap: 'nowrap',
+    overflow: 'hidden',
   },
 });

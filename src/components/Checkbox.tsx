@@ -8,7 +8,7 @@ import {runOnJS} from 'react-native-reanimated';
 
 interface Props {
   value: boolean;
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
   onChanged: () => void;
 }
 
@@ -29,7 +29,7 @@ export default function Checkbox({value, onChanged, style}: Props) {
         ]}>
         {value && (
           <CheckIcon
-            color={isDarkMode ? 'white' : '#707070'}
+            color={isDarkMode ? colors.white : '#707070'}
             strokeWidth={3.5}
           />
         )}

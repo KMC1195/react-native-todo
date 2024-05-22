@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, useColorScheme} from 'react-native';
+import {View, StyleSheet, useColorScheme} from 'react-native';
 import React, {useContext} from 'react';
 import {colors} from '../theme/colors';
 import {
@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {Project} from '../models/todos_models';
+import {IProjectProps} from '../types/Todos';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
@@ -21,13 +21,15 @@ import Checkbox from './Checkbox';
 
 interface Props {
   navigation: NavigationProp<any, any>;
-  project: Project;
+  project: IProjectProps;
 }
 
 export default function ProjectListTile({navigation, project}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
-
   const todos = useContext(TodosContext);
+
+  const itemHeight = useSharedValue(60);
+  const itemMarginBottom = useSharedValue(10);
 
   const tap = Gesture.Tap().onEnd(() => {
     runOnJS(navigation.navigate)({
@@ -36,22 +38,16 @@ export default function ProjectListTile({navigation, project}: Props) {
     });
   });
 
-  const itemHeight = useSharedValue(60);
-  const itemMarginBottom = useSharedValue(10);
-
   function rightSwipe() {
     return (
       <View
-        style={{
-          backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
-          height: 60,
-          flex: 1,
-          borderRadius: 10,
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          paddingHorizontal: 20,
-        }}>
-        <TrashIcon color="white" strokeWidth={2} size={30} />
+        style={[
+          styles.swipeContainer,
+          {
+            backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+          },
+        ]}>
+        <TrashIcon color={colors.white} strokeWidth={2} size={30} />
       </View>
     );
   }
@@ -87,20 +83,22 @@ export default function ProjectListTile({navigation, project}: Props) {
           ]}>
           <Checkbox
             value={project.completed}
-            style={{
-              backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
-              borderRadius: 5,
-            }}
+            style={[
+              styles.checkBox,
+              {
+                backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
+              },
+            ]}
             onChanged={() => todos.toggleProjectCompletion(project.id)}
           />
           <StyledText
-            styles={{
-              fontFamily: 'Poppins-SemiBold',
-              textDecorationLine: project.completed ? 'line-through' : 'none',
-              flex: 1,
-              flexWrap: 'nowrap',
-              overflow: 'hidden',
-            }}>
+            weight="semiBold"
+            textStyles={[
+              styles.text,
+              {
+                textDecorationLine: project.completed ? 'line-through' : 'none',
+              },
+            ]}>
             {project.name.length > 24
               ? project.name.slice(1) + '...'
               : project.name}
@@ -118,5 +116,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 15,
+  },
+  checkBox: {
+    borderRadius: 5,
+  },
+  text: {
+    flex: 1,
+    flexWrap: 'nowrap',
+    overflow: 'hidden',
+  },
+  swipeContainer: {
+    height: 60,
+    flex: 1,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
   },
 });

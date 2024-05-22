@@ -1,7 +1,6 @@
 import {
   Pressable,
   StyleSheet,
-  Text,
   TextStyle,
   ViewStyle,
   useColorScheme,
@@ -13,12 +12,12 @@ import {GestureResponderEvent} from 'react-native';
 
 interface Props {
   children: ReactNode;
-  containerStyles?: ViewStyle;
+  containerStyles?: ViewStyle | ViewStyle[];
   textStyles?: TextStyle;
   onPress: (event: GestureResponderEvent) => void;
 }
 
-export default function MyButton({
+export default function Button({
   children,
   onPress,
   textStyles,
@@ -34,11 +33,7 @@ export default function MyButton({
         {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
         containerStyles,
       ]}>
-      <StyledText
-        styles={[
-          {fontFamily: 'Poppins-SemiBold'},
-          textStyles ? textStyles : {},
-        ]}>
+      <StyledText textStyles={[textStyles ? textStyles : {}]} weight="semiBold">
         {children}
       </StyledText>
     </Pressable>
