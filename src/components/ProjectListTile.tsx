@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {IProjectProps} from '../types/Todos';
+import {Project} from '../types/Todos';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
@@ -21,7 +21,7 @@ import Checkbox from './Checkbox';
 
 interface Props {
   navigation: NavigationProp<any, any>;
-  project: IProjectProps;
+  project: Project;
 }
 
 export default function ProjectListTile({navigation, project}: Props) {

@@ -8,15 +8,15 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {IProjectProps, ITaskProps} from '../types/Todos';
+import {Project, Task} from '../types/Todos';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import {TodosContext} from '../store/todos_context';
 import Checkbox from './Checkbox';
 
 interface Props {
-  project: IProjectProps;
-  task: ITaskProps;
+  project: Project;
+  task: Task;
 }
 
 export default function TaskListTile({project, task}: Props) {

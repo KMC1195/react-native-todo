@@ -8,7 +8,7 @@ interface Props {
   navigation: NavigationProp<any, any>;
 }
 
-export default function FAB({navigation}: Props) {
+export default function FloatingActionButton({navigation}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (

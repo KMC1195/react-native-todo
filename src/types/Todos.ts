@@ -1,19 +1,19 @@
-export interface ITaskProps {
+export interface Task {
   name: string;
   completed: boolean;
   id: number;
 }
 
-export interface IProjectProps {
+export interface Project {
   name: string;
   description: string;
   datetime: Date;
   completed: boolean;
   id: number;
-  tasks: ITaskProps[];
+  tasks: Task[];
 }
 
-export interface IEditedProjectDataProps {
+export interface EditedProjectData {
   name: string;
   description: string;
   datetime: Date;

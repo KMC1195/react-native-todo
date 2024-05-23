@@ -1,18 +1,12 @@
-import {
-  View,
-  SafeAreaView,
-  useColorScheme,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import {View, useColorScheme, ScrollView, StyleSheet} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
-import {colors} from '../theme/colors';
 import MyTextInput from '../components/TextField';
 import ListTile from '../components/ProjectListTile';
 import {TodosContext} from '../store/todos_context';
 import StyledText from '../components/StyledText';
-import FAB from '../components/FAB';
+import FloatingActionButton from '../components/FloatingActionButton';
+import AppSafeAreaView from '../components/AppSafeAreaView';
 
 interface IScreenProps {
   navigation: NavigationProp<any, any>;
@@ -21,17 +15,10 @@ interface IScreenProps {
 export default function HomeScreen({navigation}: IScreenProps) {
   const [search, setSearch] = useState('');
 
-  const isDarkMode = useColorScheme() === 'dark';
   const todos = useContext(TodosContext);
 
   return (
-    <SafeAreaView
-      style={[
-        {
-          backgroundColor: isDarkMode ? colors.darkGray : colors.white,
-        },
-        styles.safeAreaView,
-      ]}>
+    <AppSafeAreaView>
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
@@ -51,8 +38,8 @@ export default function HomeScreen({navigation}: IScreenProps) {
             ))}
         </View>
       </ScrollView>
-      <FAB navigation={navigation} />
-    </SafeAreaView>
+      <FloatingActionButton navigation={navigation} />
+    </AppSafeAreaView>
   );
 }
 

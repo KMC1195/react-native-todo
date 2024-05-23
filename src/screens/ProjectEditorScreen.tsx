@@ -1,5 +1,4 @@
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Platform,
@@ -8,7 +7,6 @@ import {
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {colors} from '../theme/colors';
 import Header from '../components/Header';
 import {TodosContext} from '../store/todos_context';
 import StyledText from '../components/StyledText';
@@ -18,8 +16,9 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import {formatDate} from '../utils/formatDate';
-import {TDatetimePickerMode} from '../types/DatetimePicker';
+import {DatetimePickerMode} from '../types/DatetimePicker';
 import SnackBar from '../components/SnackBar';
+import AppSafeAreaView from '../components/AppSafeAreaView';
 
 interface IScreenProps {
   route: RouteProp<any, any>;
@@ -31,7 +30,7 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(new Date());
   const [datetimePickerMode, setDatetimePickerMode] =
-    useState<TDatetimePickerMode>('date');
+    useState<DatetimePickerMode>('date');
   const [isDatetimePickerShown, setIsDatetimePickerShown] = useState(
     Platform.OS === 'ios' ? true : false,
   );
@@ -107,13 +106,7 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
 
   return (
     <>
-      <SafeAreaView
-        style={[
-          {
-            backgroundColor: isDarkMode ? colors.darkGray : colors.white,
-          },
-          styles.safeAreaView,
-        ]}>
+      <AppSafeAreaView>
         <Header
           title={projectId ? 'Edit project' : 'Add project'}
           navigation={navigation}
@@ -161,7 +154,7 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
             </MyButton>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </AppSafeAreaView>
       <SnackBar
         message="You can't create or edit a project without a title"
         isShown={isSnackBarShown}

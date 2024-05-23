@@ -1,6 +1,5 @@
 import {
   StyleSheet,
-  SafeAreaView,
   useColorScheme,
   ScrollView,
   View,
@@ -18,6 +17,7 @@ import TaskListTile from '../components/TaskListTile';
 import AddTaskPopup from '../components/AddTaskPopup';
 import {PencilSquareIcon} from 'react-native-heroicons/outline';
 import {formatDate} from '../utils/formatDate';
+import AppSafeAreaView from '../components/AppSafeAreaView';
 
 interface IScreenProps {
   route: RouteProp<any, any>;
@@ -38,13 +38,7 @@ export default function ProjectsDetailsScreen({
 
   return (
     <>
-      <SafeAreaView
-        style={[
-          {
-            backgroundColor: isDarkMode ? colors.darkGray : colors.white,
-          },
-          styles.safeAreaView,
-        ]}>
+      <AppSafeAreaView>
         <Header
           navigation={navigation}
           title={project.name}
@@ -121,7 +115,7 @@ export default function ProjectsDetailsScreen({
             )}
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </AppSafeAreaView>
 
       {addTaskPopupVisible && (
         <AddTaskPopup

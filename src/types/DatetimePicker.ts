@@ -1,1 +1,1 @@
-export type TDatetimePickerMode = 'date' | 'time';
+export type DatetimePickerMode = 'date' | 'time';
