@@ -1,23 +1,26 @@
 import {Pressable, StyleSheet, View, useColorScheme} from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {colors} from '../theme/colors';
 import StyledText from './StyledText';
 import MyTextInput from './TextField';
 import MyButton from './Button';
-import {TodosContext} from '../store/todos_context';
 import SnackBar from './SnackBar';
+import {useTodos} from '../hooks/useTodos';
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 
 interface IScreenProps {
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   projectId: number;
 }
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
   const [name, setName] = useState('');
   const [isSnackBarShown, setIsSnackBarShown] = useState(false);
 
   const isDarkMode = useColorScheme() === 'dark';
-  const todo = useContext(TodosContext);
+  const todos = useTodos();
 
   function addTask() {
     if (!name) {
@@ -32,7 +35,7 @@ export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
         completed: false,
       };
 
-      todo.createTask(projectId, newTask);
+      todos.createTask(projectId, newTask);
 
       setPopupOpen(false);
     }
@@ -40,7 +43,11 @@ export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
 
   return (
     <>
-      <Pressable style={styles.container} onPress={() => setPopupOpen(false)}>
+      <AnimatedPressable
+        onPress={() => setPopupOpen(false)}
+        style={styles.container}
+        entering={FadeIn.duration(200)}
+        exiting={FadeOut.duration(200)}>
         <View
           style={[
             styles.contentContainer,
@@ -54,16 +61,12 @@ export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
             setValue={setName}
             placeholder="Enter task's name"
           />
-          <MyButton
-            onPress={addTask}
-            containerStyles={{
-              alignSelf: 'flex-end',
-              paddingHorizontal: 20,
-            }}>
+          <MyButton onPress={addTask} containerStyles={styles.addButton}>
             Add
           </MyButton>
         </View>
-      </Pressable>
+      </AnimatedPressable>
+
       <SnackBar
         message="You can't create a task without a title!"
         isShown={isSnackBarShown}
@@ -91,4 +94,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   title: {fontSize: 30},
+  addButton: {
+    alignSelf: 'flex-end',
+    paddingHorizontal: 20,
+  },
 });

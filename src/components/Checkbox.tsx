@@ -1,8 +1,7 @@
-import {StyleSheet, Text, View, useColorScheme, ViewStyle} from 'react-native';
+import {StyleSheet, View, useColorScheme, ViewStyle} from 'react-native';
 import React from 'react';
 import {CheckIcon} from 'react-native-heroicons/outline';
 import {colors} from '../theme/colors';
-import {GestureResponderEvent} from 'react-native';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {runOnJS} from 'react-native-reanimated';
 

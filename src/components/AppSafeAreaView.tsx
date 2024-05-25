@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  useColorScheme,
-  SafeAreaView,
-  StyleSheet,
-} from 'react-native';
+import {useColorScheme, SafeAreaView, StyleSheet} from 'react-native';
 import React, {ReactNode} from 'react';
 import {colors} from '../theme/colors';
 

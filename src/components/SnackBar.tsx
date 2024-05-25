@@ -1,12 +1,8 @@
-import {View, Text, useColorScheme, StyleSheet} from 'react-native';
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import {useColorScheme, StyleSheet} from 'react-native';
+import React from 'react';
 import {colors} from '../theme/colors';
 import StyledText from './StyledText';
-import Animated, {
-  FadeInDown,
-  FadeInUp,
-  FadeOutDown,
-} from 'react-native-reanimated';
+import Animated, {FadeInDown, FadeOutDown} from 'react-native-reanimated';
 
 interface Props {
   isShown: boolean;

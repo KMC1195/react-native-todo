@@ -1,7 +1,7 @@
 import {View, StyleSheet, useColorScheme} from 'react-native';
-import React, {useContext} from 'react';
+import React from 'react';
 import {colors} from '../theme/colors';
-import {Gesture, Swipeable} from 'react-native-gesture-handler';
+import {Swipeable} from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -11,8 +11,8 @@ import Animated, {
 import {Project, Task} from '../types/Todos';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
-import {TodosContext} from '../store/todos_context';
 import Checkbox from './Checkbox';
+import {useTodos} from '../hooks/useTodos';
 
 interface Props {
   project: Project;
@@ -21,7 +21,7 @@ interface Props {
 
 export default function TaskListTile({project, task}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
-  const todos = useContext(TodosContext);
+  const todos = useTodos();
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
 
@@ -30,15 +30,12 @@ export default function TaskListTile({project, task}: Props) {
   function rightSwipe() {
     return (
       <View
-        style={{
-          backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
-          height: 60,
-          flex: 1,
-          borderRadius: 10,
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          paddingHorizontal: 20,
-        }}>
+        style={[
+          styles.swipeContainer,
+          {
+            backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+          },
+        ]}>
         <TrashIcon color={colors.white} strokeWidth={2} size={30} />
       </View>
     );
@@ -72,10 +69,12 @@ export default function TaskListTile({project, task}: Props) {
         ]}>
         <Checkbox
           value={task.completed}
-          style={{
-            backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
-            borderRadius: 5,
-          }}
+          style={[
+            {
+              backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
+            },
+            styles.checkBox,
+          ]}
           onChanged={() => todos.toggleTaskCompletion(projectIndex, task.id)}
         />
         <StyledText
@@ -105,5 +104,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'nowrap',
     overflow: 'hidden',
+  },
+  checkBox: {borderRadius: 5},
+  swipeContainer: {
+    height: 60,
+    flex: 1,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
   },
 });

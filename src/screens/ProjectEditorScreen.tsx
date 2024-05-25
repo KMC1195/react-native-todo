@@ -1,14 +1,7 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Platform,
-  View,
-  useColorScheme,
-} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Platform, View} from 'react-native';
+import React, {useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import Header from '../components/Header';
-import {TodosContext} from '../store/todos_context';
 import StyledText from '../components/StyledText';
 import MyTextInput from '../components/TextField';
 import MyButton from '../components/Button';
@@ -19,6 +12,7 @@ import {formatDate} from '../utils/formatDate';
 import {DatetimePickerMode} from '../types/DatetimePicker';
 import SnackBar from '../components/SnackBar';
 import AppSafeAreaView from '../components/AppSafeAreaView';
+import {useTodos} from '../hooks/useTodos';
 
 interface IScreenProps {
   route: RouteProp<any, any>;
@@ -26,9 +20,15 @@ interface IScreenProps {
 }
 
 export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date());
+  const projectId = route.params?.projectId;
+  const todos = useTodos();
+  const project = todos.items.filter(el => el.id === projectId)[0];
+
+  const [name, setName] = useState(projectId ? project.name : '');
+  const [description, setDescription] = useState(
+    projectId ? project.description : '',
+  );
+  const [date, setDate] = useState(projectId ? project.datetime : new Date());
   const [datetimePickerMode, setDatetimePickerMode] =
     useState<DatetimePickerMode>('date');
   const [isDatetimePickerShown, setIsDatetimePickerShown] = useState(
@@ -36,18 +36,11 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
   );
   const [isSnackBarShown, setIsSnackBarShown] = useState(false);
 
-  const isDarkMode = useColorScheme() === 'dark';
-  const todos = useContext(TodosContext);
-
-  const projectId = route.params?.projectId;
-
-  const project = todos.items.filter(el => el.id === projectId)[0];
-
   function onDatetimePickerValueChange(
     event: DateTimePickerEvent,
-    date?: Date | undefined,
+    newDate?: Date | undefined,
   ) {
-    const currentDate = date;
+    const currentDate = newDate;
     if (Platform.OS === 'android') {
       setIsDatetimePickerShown(false);
     }
@@ -96,14 +89,6 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
     }
   }
 
-  useEffect(() => {
-    if (projectId) {
-      setName(project.name);
-      setDescription(project.description);
-      setDate(new Date(project.datetime));
-    }
-  }, []);
-
   return (
     <>
       <AppSafeAreaView>
@@ -115,7 +100,7 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
         <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}>
-          <View style={{marginBottom: 10}}>
+          <View style={styles.titleInputContainer}>
             <View>
               <StyledText>Title</StyledText>
               <MyTextInput value={name} setValue={setName} />
@@ -184,5 +169,8 @@ const styles = StyleSheet.create({
   },
   editProjectButton: {
     marginTop: 20,
+  },
+  titleInputContainer: {
+    marginBottom: 10,
   },
 });

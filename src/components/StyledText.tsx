@@ -22,7 +22,7 @@ export default function StyledText({children, textStyles, weight}: Props) {
         styles.text,
         {
           color: isDarkMode ? colors.white : colors.darkGray,
-          fontFamily: weight ? weightMap[weight] : weightMap['regular'],
+          fontFamily: weight ? weightMap[weight] : weightMap.regular,
         },
         textStyles,
       ]}>

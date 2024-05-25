@@ -5,9 +5,8 @@ import {
   View,
   Pressable,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {TodosContext} from '../store/todos_context';
 import {colors} from '../theme/colors';
 import Header from '../components/Header';
 import StyledText from '../components/StyledText';
@@ -18,6 +17,7 @@ import AddTaskPopup from '../components/AddTaskPopup';
 import {PencilSquareIcon} from 'react-native-heroicons/outline';
 import {formatDate} from '../utils/formatDate';
 import AppSafeAreaView from '../components/AppSafeAreaView';
+import {useTodos} from '../hooks/useTodos';
 
 interface IScreenProps {
   route: RouteProp<any, any>;
@@ -30,11 +30,11 @@ export default function ProjectsDetailsScreen({
 }: IScreenProps) {
   const [addTaskPopupVisible, setAddTaskPopupVisible] = useState(false);
 
-  const todos = useContext(TodosContext);
+  const todos = useTodos();
   const isDarkMode = useColorScheme() === 'dark';
 
   const projectId = route.params?.projectId;
-  const project = todos.items.filter(el => el.id == projectId)[0];
+  const project = todos.items.filter(el => el.id === projectId)[0];
 
   return (
     <>
@@ -105,7 +105,7 @@ export default function ProjectsDetailsScreen({
             </View>
 
             {project.tasks.length > 0 ? (
-              project.tasks.map((item, index) => (
+              project.tasks.map(item => (
                 <TaskListTile task={item} key={item.id} project={project} />
               ))
             ) : (

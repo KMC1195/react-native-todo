@@ -35,12 +35,11 @@ export default function Button({
       ]}>
       <Text
         style={[
-          textStyles,
+          styles.text,
           {
-            fontFamily: 'Poppins-SemiBold',
-            fontSize: 20,
             color: isDarkMode ? colors.white : colors.darkGray,
           },
+          textStyles,
         ]}>
         {children}
       </Text>
@@ -54,5 +53,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  text: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 20,
   },
 });

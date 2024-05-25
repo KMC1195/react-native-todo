@@ -1,5 +1,5 @@
 import {View, StyleSheet, useColorScheme} from 'react-native';
-import React, {useContext} from 'react';
+import React from 'react';
 import {colors} from '../theme/colors';
 import {
   Gesture,
@@ -15,9 +15,9 @@ import Animated, {
 import {Project} from '../types/Todos';
 import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
-import {TodosContext} from '../store/todos_context';
 import {NavigationProp} from '@react-navigation/native';
 import Checkbox from './Checkbox';
+import {useTodos} from '../hooks/useTodos';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -26,7 +26,7 @@ interface Props {
 
 export default function ProjectListTile({navigation, project}: Props) {
   const isDarkMode = useColorScheme() === 'dark';
-  const todos = useContext(TodosContext);
+  const todos = useTodos();
 
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
