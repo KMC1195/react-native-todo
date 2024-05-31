@@ -1,12 +1,6 @@
-import {
-  View,
-  Platform,
-  TextInput,
-  useColorScheme,
-  StyleSheet,
-} from 'react-native';
+import {View, Platform, TextInput, StyleSheet} from 'react-native';
 import React, {Dispatch} from 'react';
-import {colors} from '../theme/colors';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   placeholder?: string;
@@ -21,7 +15,7 @@ export default function TextField({
   value,
   setValue,
 }: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const colorPalette = useTheme();
 
   return (
     <View
@@ -30,7 +24,7 @@ export default function TextField({
         {
           minHeight: multiline ? 100 : 50,
           maxHeight: multiline ? 350 : 50,
-          backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray,
+          backgroundColor: colorPalette.surface,
         },
       ]}>
       <TextInput
@@ -41,10 +35,10 @@ export default function TextField({
         style={[
           styles.input,
           {
-            color: isDarkMode ? colors.white : colors.darkGray,
+            color: colorPalette.text,
           },
         ]}
-        placeholderTextColor={isDarkMode ? colors.white : colors.darkGray}
+        placeholderTextColor={colorPalette.text}
       />
     </View>
   );

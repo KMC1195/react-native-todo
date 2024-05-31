@@ -1,9 +1,9 @@
-import {View, Pressable, useColorScheme, StyleSheet} from 'react-native';
+import {View, Pressable, StyleSheet} from 'react-native';
 import {ArrowLeftIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import React, {ReactNode} from 'react';
 import {NavigationProp} from '@react-navigation/native';
-import {colors} from '../theme/colors';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -12,14 +12,14 @@ interface Props {
 }
 
 export default function Header({navigation, title, trailing}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const colorPalette = useTheme();
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.titleAndBackButtonContainer}>
         <Pressable onPress={() => navigation.goBack()}>
           <ArrowLeftIcon
-            color={isDarkMode ? colors.white : colors.darkGray}
+            color={colorPalette.text}
             strokeWidth={2.5}
             size={25}
           />

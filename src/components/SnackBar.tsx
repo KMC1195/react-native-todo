@@ -1,8 +1,8 @@
-import {useColorScheme, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
-import {colors} from '../theme/colors';
 import StyledText from './StyledText';
 import Animated, {FadeInDown, FadeOutDown} from 'react-native-reanimated';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   isShown: boolean;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function SnackBar({isShown, message}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const colorPalette = useTheme();
 
   return (
     <>
@@ -21,9 +21,7 @@ export default function SnackBar({isShown, message}: Props) {
           style={[
             styles.container,
             {
-              backgroundColor: isDarkMode
-                ? colors.middleGray
-                : colors.lightGray,
+              backgroundColor: colorPalette.surface,
             },
           ]}>
           <StyledText textStyles={styles.text} weight="semiBold">

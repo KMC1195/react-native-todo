@@ -1,9 +1,9 @@
-import {StyleSheet, View, useColorScheme, ViewStyle} from 'react-native';
+import {StyleSheet, View, ViewStyle} from 'react-native';
 import React from 'react';
 import {CheckIcon} from 'react-native-heroicons/outline';
-import {colors} from '../theme/colors';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {runOnJS} from 'react-native-reanimated';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   value: boolean;
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Checkbox({value, onChanged, style}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const colorPalette = useTheme();
 
   const tap = Gesture.Tap().onEnd(() => {
     runOnJS(onChanged)();
@@ -23,15 +23,10 @@ export default function Checkbox({value, onChanged, style}: Props) {
       <View
         style={[
           styles.container,
-          {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
+          {backgroundColor: colorPalette.surface},
           style,
         ]}>
-        {value && (
-          <CheckIcon
-            color={isDarkMode ? colors.white : '#707070'}
-            strokeWidth={3.5}
-          />
-        )}
+        {value && <CheckIcon color={colorPalette.text} strokeWidth={3.5} />}
       </View>
     </GestureDetector>
   );

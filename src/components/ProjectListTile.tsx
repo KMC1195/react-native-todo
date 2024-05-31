@@ -1,4 +1,4 @@
-import {View, StyleSheet, useColorScheme} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import React from 'react';
 import {colors} from '../theme/colors';
 import {
@@ -18,6 +18,7 @@ import StyledText from './StyledText';
 import {NavigationProp} from '@react-navigation/native';
 import Checkbox from './Checkbox';
 import {useTodos} from '../hooks/useTodos';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -25,8 +26,8 @@ interface Props {
 }
 
 export default function ProjectListTile({navigation, project}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
-  const todos = useTodos();
+  const colorPalette = useTheme();
+  const {deleteProject, toggleProjectCompletion} = useTodos();
 
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);
@@ -44,7 +45,7 @@ export default function ProjectListTile({navigation, project}: Props) {
         style={[
           styles.swipeContainer,
           {
-            backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+            backgroundColor: colorPalette.danger,
           },
         ]}>
         <TrashIcon color={colors.white} strokeWidth={2} size={30} />
@@ -54,7 +55,7 @@ export default function ProjectListTile({navigation, project}: Props) {
 
   function onListTileDelete() {
     itemHeight.value = withTiming(0, {duration: 300}, () => {
-      runOnJS(todos.deleteProject)(project.id);
+      runOnJS(deleteProject)(project.id);
     });
     itemMarginBottom.value = withTiming(0, {duration: 300});
   }
@@ -76,9 +77,7 @@ export default function ProjectListTile({navigation, project}: Props) {
             styles.container,
             containerAnimatedStyles,
             {
-              backgroundColor: isDarkMode
-                ? colors.middleGray
-                : colors.lightGray,
+              backgroundColor: colorPalette.surface,
             },
           ]}>
           <Checkbox
@@ -86,10 +85,10 @@ export default function ProjectListTile({navigation, project}: Props) {
             style={[
               styles.checkBox,
               {
-                backgroundColor: isDarkMode ? '#606060' : '#f4f4f4',
+                backgroundColor: colorPalette.backround,
               },
             ]}
-            onChanged={() => todos.toggleProjectCompletion(project.id)}
+            onChanged={() => toggleProjectCompletion(project.id)}
           />
           <StyledText
             weight="semiBold"

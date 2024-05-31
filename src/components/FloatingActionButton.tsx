@@ -1,28 +1,21 @@
-import {StyleSheet, Pressable, useColorScheme} from 'react-native';
+import {StyleSheet, Pressable} from 'react-native';
 import React from 'react';
 import {PlusIcon} from 'react-native-heroicons/outline';
-import {colors} from '../theme/colors';
 import {NavigationProp} from '@react-navigation/native';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   navigation: NavigationProp<any, any>;
 }
 
 export default function FloatingActionButton({navigation}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const colorPalette = useTheme();
 
   return (
     <Pressable
       onPress={() => navigation.navigate('ProjectEditorScreen')}
-      style={[
-        styles.container,
-        {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
-      ]}>
-      <PlusIcon
-        size={30}
-        color={isDarkMode ? colors.white : colors.darkGray}
-        strokeWidth={2.5}
-      />
+      style={[styles.container, {backgroundColor: colorPalette.surface}]}>
+      <PlusIcon size={30} color={colorPalette.text} strokeWidth={2.5} />
     </Pressable>
   );
 }

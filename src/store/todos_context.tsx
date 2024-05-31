@@ -23,32 +23,35 @@ export const TodosContext = createContext<TodosContextData | undefined>(
   undefined,
 );
 
+const getData = async () => {
+  try {
+    const storageItems = await AsyncStorage.getItem(STORAGE_KEY);
+    const defaultValue: Project[] = [];
+    if (storageItems === null) {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(defaultValue));
+      return defaultValue;
+    }
+    const JSONItems = JSON.parse(storageItems ? storageItems : '');
+    JSONItems.map((el: Project) => (el.datetime = new Date(el.datetime)));
+    return JSONItems;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export default function TodosContextProvder({children}: Props) {
   const [items, setItems] = useState<Project[]>([]);
 
-  const getData = async () => {
-    try {
-      const storageItems = await AsyncStorage.getItem(STORAGE_KEY);
-      if (storageItems !== null) {
-        const JSONItems = JSON.parse(storageItems ? storageItems : '');
-        setItems(JSONItems);
-      } else {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
-    getData();
+    (async () => {
+      setItems(await getData());
+    })();
   }, []);
 
   function deleteProject(projectId: number) {
-    let temporaryItems = [...items];
-    temporaryItems = temporaryItems.filter(el => el.id !== projectId);
-    setItems(temporaryItems);
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
+    const filtered = items.filter(el => el.id !== projectId);
+    setItems(filtered);
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   }
 
   function createProject(newProject: Project) {

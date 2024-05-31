@@ -1,44 +1,67 @@
-import {Pressable, StyleSheet, View, useColorScheme} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
-import {colors} from '../theme/colors';
 import StyledText from './StyledText';
 import MyTextInput from './TextField';
 import MyButton from './Button';
 import SnackBar from './SnackBar';
 import {useTodos} from '../hooks/useTodos';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import {useTheme} from '../hooks/useTheme';
 
-interface IScreenProps {
+interface Props {
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   projectId: number;
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const ANIMATION_DURATION = 200;
+const POPUP_TIME = 2500;
 
-export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
+export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
   const [name, setName] = useState('');
   const [isSnackBarShown, setIsSnackBarShown] = useState(false);
 
-  const isDarkMode = useColorScheme() === 'dark';
-  const todos = useTodos();
+  const colorPalette = useTheme();
+  const {createTask} = useTodos();
+
+  // function addTask() {
+  //   if (!name) {
+  //     setIsSnackBarShown(true);
+  //     setTimeout(() => {
+  //       setIsSnackBarShown(false);
+  //     }, POPUP_TIME);
+  //   } else {
+  //     const newTask = {
+  //       name,
+  //       id: Math.random(),
+  //       completed: false,
+  //     };
+
+  //     createTask(projectId, newTask);
+
+  //     setPopupOpen(false);
+  //   }
+  // }
 
   function addTask() {
     if (!name) {
       setIsSnackBarShown(true);
       setTimeout(() => {
         setIsSnackBarShown(false);
-      }, 2500);
-    } else {
-      const newTask = {
-        name,
-        id: Math.random(),
-        completed: false,
-      };
+      }, POPUP_TIME);
 
-      todos.createTask(projectId, newTask);
-
-      setPopupOpen(false);
+      return;
     }
+
+    const newTask = {
+      name,
+      id: Math.random(),
+      completed: false,
+    };
+
+    createTask(projectId, newTask);
+
+    setPopupOpen(false);
   }
 
   return (
@@ -46,13 +69,13 @@ export default function AddTaskPopup({setPopupOpen, projectId}: IScreenProps) {
       <AnimatedPressable
         onPress={() => setPopupOpen(false)}
         style={styles.container}
-        entering={FadeIn.duration(200)}
-        exiting={FadeOut.duration(200)}>
+        entering={FadeIn.duration(ANIMATION_DURATION)}
+        exiting={FadeOut.duration(ANIMATION_DURATION)}>
         <View
           style={[
             styles.contentContainer,
             {
-              backgroundColor: isDarkMode ? colors.darkGray : colors.white,
+              backgroundColor: colorPalette.backround,
             },
           ]}>
           <StyledText textStyles={styles.title}>Add task</StyledText>

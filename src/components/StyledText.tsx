@@ -1,27 +1,29 @@
-import {StyleSheet, Text, TextStyle, useColorScheme} from 'react-native';
+import {StyleSheet, Text, TextStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {colors} from '../theme/colors';
+import {useTheme} from '../hooks/useTheme';
+
+const weightMap = {
+  regular: 'Poppins-Regular',
+  semiBold: 'Poppins-SemiBold',
+} as const;
+
+type FontWeight = keyof typeof weightMap;
 
 interface Props {
   children: ReactNode;
   textStyles?: TextStyle | TextStyle[];
-  weight?: 'regular' | 'semiBold';
+  weight?: FontWeight;
 }
 
 export default function StyledText({children, textStyles, weight}: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const weightMap = {
-    regular: 'Poppins-Regular',
-    semiBold: 'Poppins-SemiBold',
-  };
+  const colorPalette = useTheme();
 
   return (
     <Text
       style={[
         styles.text,
         {
-          color: isDarkMode ? colors.white : colors.darkGray,
+          color: colorPalette.text,
           fontFamily: weight ? weightMap[weight] : weightMap.regular,
         },
         textStyles,

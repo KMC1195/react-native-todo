@@ -8,13 +8,13 @@ import FloatingActionButton from '../components/FloatingActionButton';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
 
-interface IScreenProps {
+interface Props {
   navigation: NavigationProp<any, any>;
 }
 
-export default function HomeScreen({navigation}: IScreenProps) {
+export default function HomeScreen({navigation}: Props) {
   const [search, setSearch] = useState('');
-  const todos = useTodos();
+  const {items} = useTodos();
 
   return (
     <AppSafeAreaView>
@@ -30,7 +30,7 @@ export default function HomeScreen({navigation}: IScreenProps) {
         />
 
         <View style={styles.projectsListContainer}>
-          {todos.items
+          {items
             .filter(el => el.name.toLowerCase().includes(search.toLowerCase()))
             .map(item => (
               <ListTile key={item.id} project={item} navigation={navigation} />

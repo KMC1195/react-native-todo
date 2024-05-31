@@ -1,29 +1,17 @@
-import {useColorScheme, SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import React, {ReactNode} from 'react';
-import {colors} from '../theme/colors';
+import {useTheme} from '../hooks/useTheme';
 
-interface ComponentProps {
+interface Props {
   children: ReactNode;
 }
 
-export default function AppSafeAreaView({children}: ComponentProps) {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function AppSafeAreaView({children}: Props) {
+  const colorPalette = useTheme();
 
   return (
-    <SafeAreaView
-      style={isDarkMode ? styles.safeAreaViewDark : styles.safeAreaViewLight}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colorPalette.backround}}>
       {children}
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeAreaViewLight: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  safeAreaViewDark: {
-    flex: 1,
-    backgroundColor: colors.darkGray,
-  },
-});

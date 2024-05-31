@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  useColorScheme,
-  ScrollView,
-  View,
-  Pressable,
-} from 'react-native';
+import {StyleSheet, ScrollView, View, Pressable} from 'react-native';
 import React, {useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
@@ -18,23 +12,21 @@ import {PencilSquareIcon} from 'react-native-heroicons/outline';
 import {formatDate} from '../utils/formatDate';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
+import {useTheme} from '../hooks/useTheme';
 
-interface IScreenProps {
+interface Props {
   route: RouteProp<any, any>;
   navigation: NavigationProp<any, any>;
 }
 
-export default function ProjectsDetailsScreen({
-  route,
-  navigation,
-}: IScreenProps) {
+export default function ProjectsDetailsScreen({route, navigation}: Props) {
   const [addTaskPopupVisible, setAddTaskPopupVisible] = useState(false);
 
-  const todos = useTodos();
-  const isDarkMode = useColorScheme() === 'dark';
+  const {items, toggleProjectCompletion, deleteProject} = useTodos();
+  const colorPalette = useTheme();
 
   const projectId = route.params?.projectId;
-  const project = todos.items.filter(el => el.id === projectId)[0];
+  const project = items.filter(el => el.id === projectId)[0];
 
   return (
     <>
@@ -52,10 +44,7 @@ export default function ProjectsDetailsScreen({
                   },
                 });
               }}>
-              <PencilSquareIcon
-                color={isDarkMode ? colors.white : colors.darkGray}
-                strokeWidth={2}
-              />
+              <PencilSquareIcon color={colorPalette.text} strokeWidth={2} />
             </Pressable>
           }
         />
@@ -63,30 +52,32 @@ export default function ProjectsDetailsScreen({
         <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}>
-          <StyledText>{project.description}</StyledText>
+          {project.description && (
+            <StyledText>{project.description}</StyledText>
+          )}
 
           <StyledText textStyles={styles.dateText} weight="semiBold">
-            Date: {`${formatDate(new Date(project.datetime))}`}
+            Date: {`${formatDate(project.datetime)}`}
           </StyledText>
 
           <View style={styles.completedCheckBoxContainer}>
             <StyledText weight="semiBold">Completed</StyledText>
             <Checkbox
               value={project.completed}
-              onChanged={() => todos.toggleProjectCompletion(project.id)}
+              onChanged={() => toggleProjectCompletion(project.id)}
             />
           </View>
 
           <Button
             containerStyles={[
               {
-                backgroundColor: isDarkMode ? colors.darkRed : colors.lightRed,
+                backgroundColor: colorPalette.danger,
               },
               styles.deleteButton,
             ]}
             textStyles={styles.deleteButtonText}
             onPress={() => {
-              todos.deleteProject(project.id);
+              deleteProject(project.id);
               navigation.goBack();
             }}>
             Delete project

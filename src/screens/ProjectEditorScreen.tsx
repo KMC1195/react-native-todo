@@ -9,26 +9,25 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import {formatDate} from '../utils/formatDate';
-import {DatetimePickerMode} from '../types/DatetimePicker';
 import SnackBar from '../components/SnackBar';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
 
-interface IScreenProps {
+interface Props {
   route: RouteProp<any, any>;
   navigation: NavigationProp<any, any>;
 }
 
-export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
-  const projectId = route.params?.projectId;
-  const todos = useTodos();
-  const project = todos.items.filter(el => el.id === projectId)[0];
+type DatetimePickerMode = 'date' | 'time';
 
-  const [name, setName] = useState(projectId ? project.name : '');
-  const [description, setDescription] = useState(
-    projectId ? project.description : '',
-  );
-  const [date, setDate] = useState(projectId ? project.datetime : new Date());
+export default function ProjectEditorScreen({route, navigation}: Props) {
+  const projectId = route.params?.projectId;
+  const {items, editProject, createProject} = useTodos();
+  const project = items.find(el => el.id === projectId);
+
+  const [name, setName] = useState(project?.name ?? '');
+  const [description, setDescription] = useState(project?.description ?? '');
+  const [date, setDate] = useState(project?.datetime ?? new Date());
   const [datetimePickerMode, setDatetimePickerMode] =
     useState<DatetimePickerMode>('date');
   const [isDatetimePickerShown, setIsDatetimePickerShown] = useState(
@@ -38,16 +37,15 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
 
   function onDatetimePickerValueChange(
     event: DateTimePickerEvent,
-    newDate?: Date | undefined,
+    newDate?: Date,
   ) {
-    const currentDate = newDate;
     if (Platform.OS === 'android') {
       setIsDatetimePickerShown(false);
     }
-    setDate(currentDate ? currentDate : new Date());
+    setDate(newDate ?? new Date());
   }
 
-  function changeDatetimePickerMode(currentMode: 'date' | 'time') {
+  function changeDatetimePickerMode(currentMode: DatetimePickerMode) {
     setIsDatetimePickerShown(true);
     setDatetimePickerMode(currentMode);
   }
@@ -59,34 +57,35 @@ export default function ProjectEditorScreen({route, navigation}: IScreenProps) {
   }
 
   function handleButtonPress() {
-    if (name) {
-      if (projectId) {
-        const newData = {
-          name,
-          description,
-          datetime: date,
-        };
-        todos.editProject(project.id, newData);
-        navigation.goBack();
-      } else {
-        const newProject = {
-          name,
-          description,
-          datetime: date,
-          completed: false,
-          id: Math.random(),
-          tasks: [],
-        };
-
-        todos.createProject(newProject);
-        navigation.goBack();
-      }
-    } else {
+    if (!name) {
       setIsSnackBarShown(true);
       setTimeout(() => {
         setIsSnackBarShown(false);
       }, 2500);
+
+      return;
     }
+    if (!projectId) {
+      const newProject = {
+        name,
+        description,
+        datetime: date,
+        completed: false,
+        id: Math.random(),
+        tasks: [],
+      };
+      createProject(newProject);
+      navigation.goBack();
+
+      return;
+    }
+    const newData = {
+      name,
+      description,
+      datetime: date,
+    };
+    editProject(project?.id, newData);
+    navigation.goBack();
   }
 
   return (

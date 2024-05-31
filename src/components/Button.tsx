@@ -1,14 +1,7 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextStyle,
-  ViewStyle,
-  useColorScheme,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {colors} from '../theme/colors';
 import {GestureResponderEvent} from 'react-native';
+import {useTheme} from '../hooks/useTheme';
 
 interface Props {
   children: ReactNode;
@@ -23,21 +16,21 @@ export default function Button({
   textStyles,
   containerStyles,
 }: Props) {
-  const isDarkMode = useColorScheme() === 'dark';
+  const colorPalette = useTheme();
 
   return (
     <Pressable
       onPress={onPress}
       style={[
         styles.container,
-        {backgroundColor: isDarkMode ? colors.middleGray : colors.lightGray},
+        {backgroundColor: colorPalette.surface},
         containerStyles,
       ]}>
       <Text
         style={[
           styles.text,
           {
-            color: isDarkMode ? colors.white : colors.darkGray,
+            color: colorPalette.text,
           },
           textStyles,
         ]}>
