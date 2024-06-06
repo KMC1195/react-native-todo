@@ -2,12 +2,14 @@ import {Pressable, StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
 import {GestureResponderEvent} from 'react-native';
 import {useTheme} from '../hooks/useTheme';
+import {colors} from '../theme/colors';
 
 interface Props {
   children: ReactNode;
   containerStyles?: ViewStyle | ViewStyle[];
   textStyles?: TextStyle;
   onPress: (event: GestureResponderEvent) => void;
+  danger?: boolean;
 }
 
 export default function Button({
@@ -15,6 +17,7 @@ export default function Button({
   onPress,
   textStyles,
   containerStyles,
+  danger,
 }: Props) {
   const colorPalette = useTheme();
 
@@ -23,14 +26,16 @@ export default function Button({
       onPress={onPress}
       style={[
         styles.container,
-        {backgroundColor: colorPalette.surface},
+        {
+          backgroundColor: danger ? colorPalette.danger : colorPalette.surface,
+        },
         containerStyles,
       ]}>
       <Text
         style={[
           styles.text,
           {
-            color: colorPalette.text,
+            color: danger ? colors.white : colorPalette.text,
           },
           textStyles,
         ]}>

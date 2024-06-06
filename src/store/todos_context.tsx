@@ -1,8 +1,6 @@
-import React, {ReactNode, createContext, useEffect, useState} from 'react';
+import React, {ReactNode, createContext} from 'react';
 import {Project, Task, EditedProjectData} from '../types/Todos';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const STORAGE_KEY = 'items';
+import {useAsyncStorage} from '../hooks/useAsyncStorage';
 
 interface Props {
   children: ReactNode;
@@ -23,42 +21,18 @@ export const TodosContext = createContext<TodosContextData | undefined>(
   undefined,
 );
 
-const getData = async () => {
-  try {
-    const storageItems = await AsyncStorage.getItem(STORAGE_KEY);
-    const defaultValue: Project[] = [];
-    if (storageItems === null) {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(defaultValue));
-      return defaultValue;
-    }
-    const JSONItems = JSON.parse(storageItems ? storageItems : '');
-    JSONItems.map((el: Project) => (el.datetime = new Date(el.datetime)));
-    return JSONItems;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export default function TodosContextProvder({children}: Props) {
-  const [items, setItems] = useState<Project[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      setItems(await getData());
-    })();
-  }, []);
+  const [items, setItems] = useAsyncStorage();
 
   function deleteProject(projectId: number) {
-    const filtered = items.filter(el => el.id !== projectId);
+    const filtered = items.filter((el: Project) => el.id !== projectId);
     setItems(filtered);
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   }
 
   function createProject(newProject: Project) {
     let temporaryItems = [...items];
     temporaryItems.push(newProject);
     setItems(temporaryItems);
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function toggleProjectCompletion(projectId: number) {
@@ -70,8 +44,6 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(updatedItems);
-
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedItems));
   }
 
   function editProject(projectId: number, newData: EditedProjectData) {
@@ -87,8 +59,6 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(temporaryItems);
-
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function deleteTask(projectIndex: number, taskId: number) {
@@ -99,8 +69,6 @@ export default function TodosContextProvder({children}: Props) {
       index === projectIndex ? {...item, tasks: currentTasks} : item,
     );
     setItems(temporaryItems);
-
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function toggleTaskCompletion(projectIndex: number, taskId: number) {
@@ -115,8 +83,6 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(temporaryItems);
-
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   function createTask(projectId: number, newItem: Task) {
@@ -130,8 +96,6 @@ export default function TodosContextProvder({children}: Props) {
     );
 
     setItems(temporaryItems);
-
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(temporaryItems));
   }
 
   const valueObject = {

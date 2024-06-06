@@ -1,15 +1,20 @@
 import {useColorScheme} from 'react-native';
 import {colors} from '../theme/colors';
 
+const darkTheme = {
+  backround: colors.darkGray,
+  surface: colors.middleGray,
+  text: colors.white,
+  danger: colors.darkRed,
+};
+
+const lightTheme = {
+  backround: colors.white,
+  surface: colors.lightGray,
+  text: colors.darkGray,
+  danger: colors.lightRed,
+};
+
 export function useTheme() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const colorPalette = {
-    backround: isDarkMode ? colors.darkGray : colors.white,
-    surface: isDarkMode ? colors.middleGray : colors.lightGray,
-    text: isDarkMode ? colors.white : colors.darkGray,
-    danger: isDarkMode ? colors.darkRed : colors.lightRed,
-  };
-
-  return colorPalette;
+  return useColorScheme() === 'dark' ? darkTheme : lightTheme;
 }

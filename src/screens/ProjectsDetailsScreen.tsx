@@ -26,89 +26,96 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
   const colorPalette = useTheme();
 
   const projectId = route.params?.projectId;
-  const project = items.filter(el => el.id === projectId)[0];
+  const project = projectId ? items.find(el => el.id === projectId) : null;
 
   return (
     <>
       <AppSafeAreaView>
-        <Header
-          navigation={navigation}
-          title={project.name}
-          trailing={
-            <Pressable
-              onPress={() => {
-                navigation.navigate({
-                  name: 'ProjectEditorScreen',
-                  params: {
-                    projectId: project.id,
-                  },
-                });
-              }}>
-              <PencilSquareIcon color={colorPalette.text} strokeWidth={2} />
-            </Pressable>
-          }
-        />
-
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}>
-          {project.description && (
-            <StyledText>{project.description}</StyledText>
-          )}
-
-          <StyledText textStyles={styles.dateText} weight="semiBold">
-            Date: {`${formatDate(project.datetime)}`}
-          </StyledText>
-
-          <View style={styles.completedCheckBoxContainer}>
-            <StyledText weight="semiBold">Completed</StyledText>
-            <Checkbox
-              value={project.completed}
-              onChanged={() => toggleProjectCompletion(project.id)}
+        {project ? (
+          <>
+            <Header
+              navigation={navigation}
+              title={project.name}
+              trailing={
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate({
+                      name: 'ProjectEditorScreen',
+                      params: {
+                        projectId: project.id,
+                      },
+                    });
+                  }}>
+                  <PencilSquareIcon color={colorPalette.text} strokeWidth={2} />
+                </Pressable>
+              }
             />
-          </View>
+            <ScrollView
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}>
+              {project.description && (
+                <StyledText>{project.description}</StyledText>
+              )}
 
-          <Button
-            containerStyles={[
-              {
-                backgroundColor: colorPalette.danger,
-              },
-              styles.deleteButton,
-            ]}
-            textStyles={styles.deleteButtonText}
-            onPress={() => {
-              deleteProject(project.id);
-              navigation.goBack();
-            }}>
-            Delete project
-          </Button>
-
-          <View style={styles.showingTasksElementContainer}>
-            <View style={styles.tasksContainer}>
-              <StyledText textStyles={styles.tasksText} weight="semiBold">
-                Tasks:
+              <StyledText textStyles={styles.dateText} weight="semiBold">
+                Date: {`${formatDate(project.datetime)}`}
               </StyledText>
+
+              <View style={styles.completedCheckBoxContainer}>
+                <StyledText weight="semiBold">Completed</StyledText>
+                <Checkbox
+                  value={project.completed}
+                  onChanged={() => toggleProjectCompletion(project.id)}
+                />
+              </View>
+
               <Button
-                onPress={() => setAddTaskPopupVisible(true)}
-                containerStyles={styles.addTaskButton}>
-                Add task
+                containerStyles={styles.deleteButton}
+                danger
+                onPress={() => {
+                  deleteProject(project.id);
+                  navigation.goBack();
+                }}>
+                Delete project
               </Button>
-            </View>
 
-            {project.tasks.length > 0 ? (
-              project.tasks.map(item => (
-                <TaskListTile task={item} key={item.id} project={project} />
-              ))
-            ) : (
-              <StyledText>
-                There are no tasks yet. Click "Add task" to create one!
+              <View style={styles.showingTasksElementContainer}>
+                <View style={styles.tasksContainer}>
+                  <StyledText textStyles={styles.tasksText} weight="semiBold">
+                    Tasks:
+                  </StyledText>
+                  <Button
+                    onPress={() => setAddTaskPopupVisible(true)}
+                    containerStyles={styles.addTaskButton}>
+                    Add task
+                  </Button>
+                </View>
+
+                {project.tasks.length > 0 ? (
+                  project.tasks.map(item => (
+                    <TaskListTile task={item} key={item.id} project={project} />
+                  ))
+                ) : (
+                  <StyledText>
+                    There are no tasks yet. Click "Add task" to create one!
+                  </StyledText>
+                )}
+              </View>
+            </ScrollView>
+          </>
+        ) : (
+          <View style={styles.errorBoxContainer}>
+            <View
+              style={[styles.errorBox, {backgroundColor: colorPalette.danger}]}>
+              <StyledText textStyles={{color: colors.white}}>
+                Something went wrong.
               </StyledText>
-            )}
+            </View>
           </View>
-        </ScrollView>
+        )}
       </AppSafeAreaView>
 
-      {addTaskPopupVisible && (
+      {addTaskPopupVisible && project && (
         <AddTaskPopup
           setPopupOpen={setAddTaskPopupVisible}
           projectId={project.id}
@@ -136,9 +143,6 @@ const styles = StyleSheet.create({
   deleteButton: {
     marginTop: 20,
   },
-  deleteButtonText: {
-    color: colors.white,
-  },
   showingTasksElementContainer: {
     marginTop: 30,
   },
@@ -151,5 +155,17 @@ const styles = StyleSheet.create({
   tasksText: {fontSize: 30},
   addTaskButton: {
     padding: 5,
+  },
+  errorBoxContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorBox: {
+    width: '85%',
+    height: '20%',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
