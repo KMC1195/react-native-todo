@@ -21,6 +21,7 @@ export default function TextField({
     <View
       style={[
         styles.container,
+        // eslint-disable-next-line react-native/no-inline-styles
         {
           minHeight: multiline ? 100 : 50,
           maxHeight: multiline ? 350 : 50,
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
     paddingVertical: Platform.OS === 'android' ? 0 : 15,
-    borderRadius: 10,
+    borderRadius: 15,
   },
   input: {
     fontSize: 18,

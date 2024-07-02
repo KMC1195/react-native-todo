@@ -5,14 +5,14 @@ const darkTheme = {
   backround: colors.darkGray,
   surface: colors.middleGray,
   text: colors.white,
-  danger: colors.darkRed,
+  accent: colors.pink,
 };
 
 const lightTheme = {
   backround: colors.white,
   surface: colors.lightGray,
   text: colors.darkGray,
-  danger: colors.lightRed,
+  accent: colors.pink,
 };
 
 export function useTheme() {
