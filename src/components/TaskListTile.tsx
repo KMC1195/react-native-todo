@@ -34,7 +34,7 @@ export default function TaskListTile({project, task}: Props) {
         style={[
           styles.swipeContainer,
           {
-            backgroundColor: colorPalette.danger,
+            backgroundColor: colorPalette.accent,
           },
         ]}>
         <TrashIcon color={colors.white} strokeWidth={2} size={30} />
@@ -70,23 +70,18 @@ export default function TaskListTile({project, task}: Props) {
         ]}>
         <Checkbox
           value={task.completed}
-          style={[
-            {
-              backgroundColor: colorPalette.backround,
-            },
-            styles.checkBox,
-          ]}
           onChanged={() => toggleTaskCompletion(projectIndex, task.id)}
         />
         <StyledText
           weight="semiBold"
           textStyles={[
             styles.text,
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               textDecorationLine: task.completed ? 'line-through' : 'none',
             },
           ]}>
-          {task.name.length > 24 ? task.name.slice(1) + '...' : task.name}
+          {task.name}
         </StyledText>
       </Animated.View>
     </Swipeable>
@@ -106,7 +101,6 @@ const styles = StyleSheet.create({
     flexWrap: 'nowrap',
     overflow: 'hidden',
   },
-  checkBox: {borderRadius: 5},
   swipeContainer: {
     height: 60,
     flex: 1,

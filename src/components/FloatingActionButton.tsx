@@ -3,6 +3,7 @@ import React from 'react';
 import {PlusIcon} from 'react-native-heroicons/outline';
 import {NavigationProp} from '@react-navigation/native';
 import {useTheme} from '../hooks/useTheme';
+import {colors} from '../theme/colors';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -14,8 +15,8 @@ export default function FloatingActionButton({navigation}: Props) {
   return (
     <Pressable
       onPress={() => navigation.navigate('ProjectEditorScreen')}
-      style={[styles.container, {backgroundColor: colorPalette.surface}]}>
-      <PlusIcon size={30} color={colorPalette.text} strokeWidth={2.5} />
+      style={[styles.container, {backgroundColor: colorPalette.accent}]}>
+      <PlusIcon size={30} color={colors.white} strokeWidth={2.5} />
     </Pressable>
   );
 }
