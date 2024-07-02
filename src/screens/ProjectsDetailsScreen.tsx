@@ -1,4 +1,4 @@
-import {StyleSheet, View, Pressable} from 'react-native';
+import {StyleSheet, ScrollView, View, Pressable} from 'react-native';
 import React, {useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
@@ -13,13 +13,6 @@ import {formatDate} from '../utils/formatDate';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
 import {useTheme} from '../hooks/useTheme';
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-} from 'react-native-reanimated';
-import {AnimatedScrollView} from 'react-native-reanimated/lib/typescript/reanimated2/component/ScrollView';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -35,15 +28,6 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
   const projectId = route.params?.projectId;
   const project = projectId ? items.find(el => el.id === projectId) : null;
 
-  const scrollViewRef = useAnimatedRef<AnimatedScrollView>();
-  const scrollOfset = useScrollViewOffset(scrollViewRef);
-
-  const titleStyle = useAnimatedStyle(() => {
-    return {
-      opacity: interpolate(scrollOfset.value, [0, 60], [0, 1]),
-    };
-  });
-
   return (
     <>
       <AppSafeAreaView>
@@ -51,6 +35,7 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
           <>
             <Header
               navigation={navigation}
+              title={project.name}
               trailing={
                 <Pressable
                   onPress={() => {
@@ -63,17 +48,11 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
                   }}>
                   <PencilSquareIcon color={colorPalette.text} strokeWidth={2} />
                 </Pressable>
-              }>
-              <Animated.View style={titleStyle}>
-                <StyledText weight="semiBold">{project.name}</StyledText>
-              </Animated.View>
-            </Header>
-            <Animated.ScrollView
-              ref={scrollViewRef}
+              }
+            />
+            <ScrollView
               style={styles.scrollView}
               showsVerticalScrollIndicator={false}>
-              <StyledText textStyles={styles.title}>{project.name}</StyledText>
-
               {project.description && (
                 <StyledText>{project.description}</StyledText>
               )}
@@ -92,7 +71,7 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
 
               <Button
                 containerStyles={styles.deleteButton}
-                accent
+                danger
                 onPress={() => {
                   deleteProject(project.id);
                   navigation.goBack();
@@ -122,12 +101,12 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
                   </StyledText>
                 )}
               </View>
-            </Animated.ScrollView>
+            </ScrollView>
           </>
         ) : (
           <View style={styles.errorBoxContainer}>
             <View
-              style={[styles.errorBox, {backgroundColor: colorPalette.accent}]}>
+              style={[styles.errorBox, {backgroundColor: colorPalette.danger}]}>
               <StyledText textStyles={{color: colors.white}}>
                 Something went wrong.
               </StyledText>
@@ -153,9 +132,8 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 10,
   },
-  title: {fontSize: 44},
   dateText: {
-    marginTop: 10,
+    marginTop: 15,
   },
   completedCheckBoxContainer: {
     justifyContent: 'space-between',

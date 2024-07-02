@@ -91,11 +91,10 @@ export default function ProjectEditorScreen({route, navigation}: Props) {
   return (
     <>
       <AppSafeAreaView>
-        <Header navigation={navigation}>
-          <StyledText weight="semiBold">
-            {projectId ? 'Edit project' : 'Add project'}
-          </StyledText>
-        </Header>
+        <Header
+          title={projectId ? 'Edit project' : 'Add project'}
+          navigation={navigation}
+        />
 
         <ScrollView
           style={styles.scrollView}
@@ -133,7 +132,6 @@ export default function ProjectEditorScreen({route, navigation}: Props) {
             </StyledText>
 
             <MyButton
-              accent
               onPress={handleButtonPress}
               containerStyles={styles.editProjectButton}>
               {projectId ? 'Edit project' : 'Add project'}

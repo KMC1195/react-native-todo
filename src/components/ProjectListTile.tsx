@@ -45,7 +45,7 @@ export default function ProjectListTile({navigation, project}: Props) {
         style={[
           styles.swipeContainer,
           {
-            backgroundColor: colorPalette.accent,
+            backgroundColor: colorPalette.danger,
           },
         ]}>
         <TrashIcon color={colors.white} strokeWidth={2} size={30} />
@@ -82,18 +82,25 @@ export default function ProjectListTile({navigation, project}: Props) {
           ]}>
           <Checkbox
             value={project.completed}
+            style={[
+              styles.checkBox,
+              {
+                backgroundColor: colorPalette.backround,
+              },
+            ]}
             onChanged={() => toggleProjectCompletion(project.id)}
           />
           <StyledText
             weight="semiBold"
             textStyles={[
               styles.text,
-              // eslint-disable-next-line react-native/no-inline-styles
               {
                 textDecorationLine: project.completed ? 'line-through' : 'none',
               },
             ]}>
-            {project.name}
+            {project.name.length > 24
+              ? project.name.slice(1) + '...'
+              : project.name}
           </StyledText>
         </Animated.View>
       </GestureDetector>
@@ -104,10 +111,13 @@ export default function ProjectListTile({navigation, project}: Props) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
-    borderRadius: 15,
+    borderRadius: 10,
     alignItems: 'center',
     flexDirection: 'row',
     gap: 15,
+  },
+  checkBox: {
+    borderRadius: 5,
   },
   text: {
     flex: 1,
@@ -117,7 +127,7 @@ const styles = StyleSheet.create({
   swipeContainer: {
     height: 60,
     flex: 1,
-    borderRadius: 15,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: 20,

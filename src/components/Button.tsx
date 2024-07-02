@@ -9,7 +9,7 @@ interface Props {
   containerStyles?: ViewStyle | ViewStyle[];
   textStyles?: TextStyle;
   onPress: (event: GestureResponderEvent) => void;
-  accent?: boolean;
+  danger?: boolean;
 }
 
 export default function Button({
@@ -17,7 +17,7 @@ export default function Button({
   onPress,
   textStyles,
   containerStyles,
-  accent,
+  danger,
 }: Props) {
   const colorPalette = useTheme();
 
@@ -27,7 +27,7 @@ export default function Button({
       style={[
         styles.container,
         {
-          backgroundColor: accent ? colorPalette.accent : colorPalette.surface,
+          backgroundColor: danger ? colorPalette.danger : colorPalette.surface,
         },
         containerStyles,
       ]}>
@@ -35,7 +35,7 @@ export default function Button({
         style={[
           styles.text,
           {
-            color: accent ? colors.white : colorPalette.text,
+            color: danger ? colors.white : colorPalette.text,
           },
           textStyles,
         ]}>

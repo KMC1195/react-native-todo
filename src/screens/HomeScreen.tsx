@@ -3,11 +3,10 @@ import React, {useState} from 'react';
 import {NavigationProp} from '@react-navigation/native';
 import MyTextInput from '../components/TextField';
 import ListTile from '../components/ProjectListTile';
+import StyledText from '../components/StyledText';
 import FloatingActionButton from '../components/FloatingActionButton';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
-import Header from '../components/Header';
-import StyledText from '../components/StyledText';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -19,12 +18,11 @@ export default function HomeScreen({navigation}: Props) {
 
   return (
     <AppSafeAreaView>
-      <Header navigation={navigation} leading="showDrawer">
-        <StyledText weight="semiBold">Home</StyledText>
-      </Header>
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
+        <StyledText textStyles={styles.title}>ToDo</StyledText>
+
         <MyTextInput
           placeholder="Search..."
           value={search}
