@@ -1,5 +1,6 @@
 import {useColorScheme} from 'react-native';
 import {colors} from '../theme/colors';
+import useTheme from './useTheme';
 
 const darkTheme = {
   backround: colors.darkGray,
@@ -16,5 +17,14 @@ const lightTheme = {
 };
 
 export function useColors() {
-  return useColorScheme() === 'dark' ? darkTheme : lightTheme;
+  const {theme} = useTheme();
+  const isDarkMode = useColorScheme() === 'dark';
+
+  if (theme === 'light') {
+    return lightTheme;
+  } else if (theme === 'dark') {
+    return darkTheme;
+  }
+
+  return isDarkMode ? darkTheme : lightTheme;
 }
