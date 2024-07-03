@@ -15,6 +15,6 @@ const lightTheme = {
   accent: colors.pink,
 };
 
-export function useTheme() {
+export function useColors() {
   return useColorScheme() === 'dark' ? darkTheme : lightTheme;
 }

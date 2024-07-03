@@ -1,13 +1,13 @@
 import {Pressable, StyleSheet} from 'react-native';
 import React from 'react';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import Separator from './Separator';
 import StyledText from './StyledText';
 import {colors} from '../theme/colors';
 
 export default function CustomDrawer({...props}) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   const {routeNames} = props.state;
 

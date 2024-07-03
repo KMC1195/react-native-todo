@@ -13,7 +13,7 @@ import {TrashIcon} from 'react-native-heroicons/outline';
 import StyledText from './StyledText';
 import Checkbox from './Checkbox';
 import {useTodos} from '../hooks/useTodos';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   project: Project;
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function TaskListTile({project, task}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
   const {items, deleteTask, toggleTaskCompletion} = useTodos();
   const itemHeight = useSharedValue(60);
   const itemMarginBottom = useSharedValue(10);

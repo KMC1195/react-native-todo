@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TextStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 const weightMap = {
   regular: 'Poppins-Regular',
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function StyledText({children, textStyles, weight}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <Text

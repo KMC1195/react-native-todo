@@ -1,6 +1,6 @@
 import {Pressable, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import StyledText from './StyledText';
 import Animated, {FadeInUp} from 'react-native-reanimated';
 import {Dispatch, SetStateAction} from 'react';
@@ -20,7 +20,7 @@ export default function Select({
 }: Props) {
   const [isShown, setIsShown] = useState(false);
 
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   function chooseOption(item: string) {
     setSelectedOption(item);

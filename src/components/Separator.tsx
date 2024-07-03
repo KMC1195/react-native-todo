@@ -1,13 +1,13 @@
 import {View, StyleSheet, ViewStyle} from 'react-native';
 import React from 'react';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   style?: ViewStyle;
 }
 
 export default function Separator({style}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <View

@@ -1,13 +1,13 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {ReactNode} from 'react';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   children: ReactNode;
 }
 
 export default function AppSafeAreaView({children}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <SafeAreaView

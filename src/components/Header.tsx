@@ -2,7 +2,7 @@ import {View, Pressable, StyleSheet} from 'react-native';
 import {ArrowLeftIcon, Bars3Icon} from 'react-native-heroicons/outline';
 import React, {ReactNode} from 'react';
 import {NavigationProp} from '@react-navigation/native';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import {DrawerActions} from '@react-navigation/native';
 
 interface Props {
@@ -18,7 +18,7 @@ export default function Header({
   trailing,
   leading = 'goBack',
 }: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <View style={styles.mainContainer}>

@@ -18,7 +18,7 @@ import StyledText from './StyledText';
 import {NavigationProp} from '@react-navigation/native';
 import Checkbox from './Checkbox';
 import {useTodos} from '../hooks/useTodos';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function ProjectListTile({navigation, project}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
   const {deleteProject, toggleProjectCompletion} = useTodos();
 
   const itemHeight = useSharedValue(60);

@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import React from 'react';
 import StyledText from './StyledText';
 import Animated, {FadeInDown, FadeOutDown} from 'react-native-reanimated';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   isShown: boolean;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function SnackBar({isShown, message}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <>

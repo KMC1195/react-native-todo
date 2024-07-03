@@ -1,7 +1,7 @@
 import {Pressable, StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
 import {GestureResponderEvent} from 'react-native';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import {colors} from '../theme/colors';
 
 interface Props {
@@ -19,7 +19,7 @@ export default function Button({
   containerStyles,
   accent,
 }: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <Pressable

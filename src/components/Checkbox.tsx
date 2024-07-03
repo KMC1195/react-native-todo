@@ -3,7 +3,7 @@ import React from 'react';
 import {CheckIcon} from 'react-native-heroicons/outline';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {runOnJS} from 'react-native-reanimated';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import {colors} from '../theme/colors';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Checkbox({value, onChanged}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   const tap = Gesture.Tap().onEnd(() => {
     runOnJS(onChanged)();

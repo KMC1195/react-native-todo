@@ -6,7 +6,7 @@ import MyButton from './Button';
 import SnackBar from './SnackBar';
 import {useTodos} from '../hooks/useTodos';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +21,7 @@ export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
   const [name, setName] = useState('');
   const [isSnackBarShown, setIsSnackBarShown] = useState(false);
 
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
   const {createTask} = useTodos();
 
   // function addTask() {

@@ -2,7 +2,7 @@ import {StyleSheet, Pressable} from 'react-native';
 import React from 'react';
 import {PlusIcon} from 'react-native-heroicons/outline';
 import {NavigationProp} from '@react-navigation/native';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import {colors} from '../theme/colors';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function FloatingActionButton({navigation}: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <Pressable

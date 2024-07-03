@@ -12,7 +12,7 @@ import {PencilSquareIcon} from 'react-native-heroicons/outline';
 import {formatDate} from '../utils/formatDate';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -30,7 +30,7 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
   const [addTaskPopupVisible, setAddTaskPopupVisible] = useState(false);
 
   const {items, toggleProjectCompletion, deleteProject} = useTodos();
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   const projectId = route.params?.projectId;
   const project = projectId ? items.find(el => el.id === projectId) : null;

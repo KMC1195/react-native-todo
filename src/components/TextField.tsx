@@ -1,6 +1,6 @@
 import {View, Platform, TextInput, StyleSheet} from 'react-native';
 import React, {Dispatch} from 'react';
-import {useTheme} from '../hooks/useTheme';
+import {useColors} from '../hooks/useColors';
 
 interface Props {
   placeholder?: string;
@@ -15,7 +15,7 @@ export default function TextField({
   value,
   setValue,
 }: Props) {
-  const colorPalette = useTheme();
+  const colorPalette = useColors();
 
   return (
     <View
