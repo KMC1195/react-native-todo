@@ -12,6 +12,8 @@ import {formatDate} from '../utils/formatDate';
 import SnackBar from '../components/SnackBar';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
+import {colors} from '../theme/colors';
+import useTheme from '../hooks/useTheme';
 
 interface Props {
   route: RouteProp<any, any>;
@@ -34,6 +36,8 @@ export default function ProjectEditorScreen({route, navigation}: Props) {
     Platform.OS === 'ios' ? true : false,
   );
   const [isSnackBarShown, setIsSnackBarShown] = useState(false);
+
+  const {theme} = useTheme();
 
   function onDatetimePickerValueChange(
     event: DateTimePickerEvent,
@@ -121,6 +125,7 @@ export default function ProjectEditorScreen({route, navigation}: Props) {
             {isDatetimePickerShown && (
               <DateTimePicker
                 value={date}
+                textColor={theme === 'dark' ? colors.white : colors.darkGray}
                 mode={datetimePickerMode}
                 display="spinner"
                 is24Hour={true}
