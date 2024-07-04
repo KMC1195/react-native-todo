@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function ThemeContextProvder({children}: Props) {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('synced with your device');
 
   const data = {
     theme,

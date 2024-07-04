@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '95%',
     height: 60,
-    borderRadius: 10,
+    borderRadius: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

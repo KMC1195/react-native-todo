@@ -1,10 +1,11 @@
-import {Pressable, StyleSheet} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {useColors} from '../hooks/useColors';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import Separator from './Separator';
 import StyledText from './StyledText';
 import {colors} from '../theme/colors';
+import {CogIcon, HomeIcon} from 'react-native-heroicons/outline';
 
 export default function CustomDrawer({...props}) {
   const colorPalette = useColors();
@@ -22,16 +23,23 @@ export default function CustomDrawer({...props}) {
       ]}>
       <StyledText textStyles={styles.title}>ToDo</StyledText>
       <Separator style={{backgroundColor: colors.white}} />
-      {routeNames.map((item: string, index: number) => (
-        <Pressable
-          style={styles.button}
-          key={index}
-          onPress={() => props.navigation.navigate(item)}>
-          <StyledText weight="semiBold" textStyles={{color: colors.darkGray}}>
-            {item}
-          </StyledText>
-        </Pressable>
-      ))}
+      <View style={styles.buttonsContainer}>
+        {routeNames.map((item: string, index: number) => (
+          <Pressable
+            style={styles.button}
+            key={index}
+            onPress={() => props.navigation.navigate(item)}>
+            {item === 'Home' ? (
+              <HomeIcon color={colors.white} size={30} strokeWidth={2} />
+            ) : (
+              <CogIcon color={colors.white} strokeWidth={2} size={30} />
+            )}
+            <StyledText weight="semiBold" textStyles={{color: colors.white}}>
+              {item}
+            </StyledText>
+          </Pressable>
+        ))}
+      </View>
     </DrawerContentScrollView>
   );
 }
@@ -45,10 +53,15 @@ const styles = StyleSheet.create({
     fontSize: 70,
     textAlign: 'center',
   },
+  buttonsContainer: {
+    marginTop: 12,
+  },
   button: {
-    marginTop: 15,
-    backgroundColor: 'white',
+    marginTop: 6,
     padding: 8,
     borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
 });

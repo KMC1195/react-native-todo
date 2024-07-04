@@ -1,10 +1,10 @@
 import React from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import Header from '../components/Header';
 import {NavigationProp} from '@react-navigation/native';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import StyledText from '../components/StyledText';
 import Select from '../components/Select';
-import {ScrollView, StyleSheet} from 'react-native';
 import useTheme from '../hooks/useTheme';
 
 interface Props {
@@ -24,11 +24,14 @@ export default function OptionsScreen({navigation}: Props) {
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
-        <Select
-          options={appThemes}
-          selectedOption={theme}
-          setSelectedOption={setTheme}
-        />
+        <View style={styles.control}>
+          <StyledText>App theme:</StyledText>
+          <Select
+            options={appThemes}
+            selectedOption={theme}
+            setSelectedOption={setTheme}
+          />
+        </View>
       </ScrollView>
     </AppSafeAreaView>
   );
@@ -37,5 +40,9 @@ export default function OptionsScreen({navigation}: Props) {
 const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 10,
+  },
+  control: {
+    flexDirection: 'column',
+    gap: 6,
   },
 });

@@ -91,7 +91,7 @@ export default function TaskListTile({project, task}: Props) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
-    borderRadius: 10,
+    borderRadius: 15,
     alignItems: 'center',
     flexDirection: 'row',
     gap: 15,

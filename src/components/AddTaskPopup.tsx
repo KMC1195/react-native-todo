@@ -24,25 +24,6 @@ export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
   const colorPalette = useColors();
   const {createTask} = useTodos();
 
-  // function addTask() {
-  //   if (!name) {
-  //     setIsSnackBarShown(true);
-  //     setTimeout(() => {
-  //       setIsSnackBarShown(false);
-  //     }, POPUP_TIME);
-  //   } else {
-  //     const newTask = {
-  //       name,
-  //       id: Math.random(),
-  //       completed: false,
-  //     };
-
-  //     createTask(projectId, newTask);
-
-  //     setPopupOpen(false);
-  //   }
-  // }
-
   function addTask() {
     if (!name) {
       setIsSnackBarShown(true);
