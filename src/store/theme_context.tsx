@@ -3,7 +3,7 @@ import {createContext, useState} from 'react';
 
 type ThemeContextData = {
   theme: string;
-  setTheme: React.Dispatch<React.SetStateAction<string>>;
+  setAppTheme: Function;
 };
 
 export const ThemeContext = createContext<ThemeContextData | undefined>(
@@ -17,9 +17,13 @@ interface Props {
 export default function ThemeContextProvder({children}: Props) {
   const [theme, setTheme] = useState('synced with your device');
 
+  function setAppTheme(appTheme: 'light' | 'dark' | 'sync with device') {
+    setTheme(appTheme);
+  }
+
   const data = {
     theme,
-    setTheme,
+    setAppTheme,
   };
 
   return <ThemeContext.Provider value={data}>{children}</ThemeContext.Provider>;

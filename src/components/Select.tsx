@@ -3,12 +3,11 @@ import React, {useState} from 'react';
 import {useColors} from '../hooks/useColors';
 import StyledText from './StyledText';
 import Animated, {FadeInUp} from 'react-native-reanimated';
-import {Dispatch, SetStateAction} from 'react';
 
 interface Props {
   options: string[];
   selectedOption: string;
-  setSelectedOption: Dispatch<SetStateAction<string>>;
+  setSelectedOption: Function;
   onChoose?: () => void;
 }
 

@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function OptionsScreen({navigation}: Props) {
-  const {theme, setTheme} = useTheme();
+  const {theme, setAppTheme} = useTheme();
 
   const appThemes = ['light', 'dark', 'synced to your device'];
 
@@ -29,7 +29,7 @@ export default function OptionsScreen({navigation}: Props) {
           <Select
             options={appThemes}
             selectedOption={theme}
-            setSelectedOption={setTheme}
+            setSelectedOption={setAppTheme}
           />
         </View>
       </ScrollView>
