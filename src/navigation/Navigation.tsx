@@ -6,7 +6,8 @@ import ProjectsDetailsScreen from '../screens/ProjectsDetailsScreen';
 import ProjectEditorScreen from '../screens/ProjectEditorScreen';
 import CustomDrawer from '../components/CustomDrawer';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import OptionsScreen from '../screens/OptionsScreen';
+
+import SettingsScreen from '../screens/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -37,7 +38,7 @@ export default function Navigation() {
         // eslint-disable-next-line react/no-unstable-nested-components
         drawerContent={props => <CustomDrawer {...props} />}>
         <Drawer.Screen name="Home" component={HomeStackNavigator} />
-        <Drawer.Screen name="Options" component={OptionsScreen} />
+        <Drawer.Screen name="Settings" component={SettingsScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
