@@ -1,40 +1,62 @@
-import {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useEffect, useState} from 'react';
 import {Project} from '../types/Todos';
 
-type useAsyncStorageReturn = [Project[], (data: Project[]) => void];
-
-const getData = async () => {
+const getStringData = async (STORAGE_KEY: string, defaultValue: string) => {
   try {
-    const storageItems = await AsyncStorage.getItem(STORAGE_KEY);
-    const defaultValue: Project[] = [];
-    if (storageItems === null) {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(defaultValue));
+    const data = await AsyncStorage.getItem(STORAGE_KEY);
+
+    if (data === null) {
+      await AsyncStorage.setItem(STORAGE_KEY, defaultValue);
       return defaultValue;
     }
-    const JSONItems = JSON.parse(storageItems ? storageItems : '');
-    JSONItems.map((el: Project) => (el.datetime = new Date(el.datetime)));
-    return JSONItems;
-  } catch (e) {
-    console.log(e);
+
+    return data;
+  } catch (err) {
+    console.log(err);
   }
 };
 
-const STORAGE_KEY = 'items';
+const getObjectData = async (STORAGE_KEY: string, defaultValue: object) => {
+  try {
+    const data = await AsyncStorage.getItem(STORAGE_KEY);
 
-export function useAsyncStorage(): useAsyncStorageReturn {
-  const [items, setItems] = useState<Project[]>([]);
+    if (data === null) {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(defaultValue));
+      return JSON.stringify(defaultValue);
+    }
+
+    return JSON.parse(data);
+  } catch (err) {}
+};
+
+type Items = '' | Project[];
+
+export function useAsyncStorage<Value extends Items>(
+  STORAGE_KEY: string,
+  defaultValue: Value,
+) {
+  const [items, setItems] = useState(defaultValue);
 
   useEffect(() => {
-    (async () => {
-      setItems(await getData());
-    })();
-  }, []);
+    if (typeof defaultValue === 'string') {
+      (async () => {
+        await getStringData(STORAGE_KEY, defaultValue);
+      })();
+    } else if (typeof defaultValue === 'object') {
+      (async () => {
+        await getObjectData(STORAGE_KEY, defaultValue ? defaultValue : {});
+      })();
+    }
+  }, [STORAGE_KEY, defaultValue]);
 
-  function setNewItems(data: Project[]) {
-    setItems(data);
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  function setData(value: Value) {
+    setItems(value);
+    AsyncStorage.setItem(
+      STORAGE_KEY,
+      typeof value === 'string' ? value : JSON.stringify(value),
+    );
   }
 
-  return [items, setNewItems];
+  return {items, setData};
 }

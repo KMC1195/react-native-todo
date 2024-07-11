@@ -22,17 +22,17 @@ export const TodosContext = createContext<TodosContextData | undefined>(
 );
 
 export default function TodosContextProvder({children}: Props) {
-  const [items, setItems] = useAsyncStorage();
+  const {items, setData} = useAsyncStorage('items', [] as Project[]);
 
   function deleteProject(projectId: number) {
     const filtered = items.filter((el: Project) => el.id !== projectId);
-    setItems(filtered);
+    setData(filtered);
   }
 
   function createProject(newProject: Project) {
-    let temporaryItems = [...items];
+    let temporaryItems: Project[] = [...items];
     temporaryItems.push(newProject);
-    setItems(temporaryItems);
+    setData(temporaryItems);
   }
 
   function toggleProjectCompletion(projectId: number) {
@@ -43,7 +43,7 @@ export default function TodosContextProvder({children}: Props) {
         : item,
     );
 
-    setItems(updatedItems);
+    setData(updatedItems);
   }
 
   function editProject(projectId: number, newData: EditedProjectData) {
@@ -58,7 +58,7 @@ export default function TodosContextProvder({children}: Props) {
         : item,
     );
 
-    setItems(temporaryItems);
+    setData(temporaryItems);
   }
 
   function deleteTask(projectIndex: number, taskId: number) {
@@ -68,7 +68,7 @@ export default function TodosContextProvder({children}: Props) {
     temporaryItems = temporaryItems.map((item, index) =>
       index === projectIndex ? {...item, tasks: currentTasks} : item,
     );
-    setItems(temporaryItems);
+    setData(temporaryItems);
   }
 
   function toggleTaskCompletion(projectIndex: number, taskId: number) {
@@ -82,7 +82,7 @@ export default function TodosContextProvder({children}: Props) {
       index === projectIndex ? {...item, tasks: updatedTasks} : item,
     );
 
-    setItems(temporaryItems);
+    setData(temporaryItems);
   }
 
   function createTask(projectId: number, newItem: Task) {
@@ -95,7 +95,7 @@ export default function TodosContextProvder({children}: Props) {
       item.id === projectId ? {...item, tasks: currentTasks} : item,
     );
 
-    setItems(temporaryItems);
+    setData(temporaryItems);
   }
 
   const valueObject = {
