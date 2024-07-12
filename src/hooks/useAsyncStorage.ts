@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect, useState} from 'react';
 import {Project} from '../types/Todos';
+import {applicationTheme} from '../types/Theme';
 
 const getStringData = async (STORAGE_KEY: string, defaultValue: string) => {
   try {
@@ -27,10 +28,12 @@ const getObjectData = async (STORAGE_KEY: string, defaultValue: object) => {
     }
 
     return JSON.parse(data);
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-type Items = '' | Project[];
+type Items = applicationTheme | Project[];
 
 export function useAsyncStorage<Value extends Items>(
   STORAGE_KEY: string,
@@ -41,11 +44,16 @@ export function useAsyncStorage<Value extends Items>(
   useEffect(() => {
     if (typeof defaultValue === 'string') {
       (async () => {
-        await getStringData(STORAGE_KEY, defaultValue);
+        const data = await getStringData(STORAGE_KEY, defaultValue);
+        setItems(data ? (data as Value) : ('light' as Value));
       })();
     } else if (typeof defaultValue === 'object') {
       (async () => {
-        await getObjectData(STORAGE_KEY, defaultValue ? defaultValue : {});
+        const data = await getObjectData(
+          STORAGE_KEY,
+          defaultValue ? defaultValue : {},
+        );
+        setItems(data);
       })();
     }
   }, [STORAGE_KEY, defaultValue]);

@@ -1,5 +1,7 @@
 import React, {ReactNode} from 'react';
-import {createContext, useState} from 'react';
+import {createContext} from 'react';
+import {applicationTheme} from '../types/Theme';
+import {useAsyncStorage} from '../hooks/useAsyncStorage';
 
 type ThemeContextData = {
   theme: string;
@@ -15,10 +17,13 @@ interface Props {
 }
 
 export default function ThemeContextProvder({children}: Props) {
-  const [theme, setTheme] = useState('synced with your device');
+  const {items: theme, setData} = useAsyncStorage(
+    'theme',
+    'light' as applicationTheme,
+  );
 
-  function setAppTheme(appTheme: 'light' | 'dark' | 'sync with device') {
-    setTheme(appTheme);
+  function setAppTheme(colors: applicationTheme) {
+    setData(colors);
   }
 
   const data = {
