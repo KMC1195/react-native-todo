@@ -20,14 +20,17 @@ const getStringData = async (STORAGE_KEY: string, defaultValue: string) => {
 
 const getObjectData = async (STORAGE_KEY: string, defaultValue: object) => {
   try {
-    const data = await AsyncStorage.getItem(STORAGE_KEY);
+    const stringData = await AsyncStorage.getItem(STORAGE_KEY);
 
-    if (data === null) {
+    if (stringData === null) {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(defaultValue));
       return JSON.stringify(defaultValue);
     }
+    const data = JSON.parse(stringData);
 
-    return JSON.parse(data);
+    data.forEach((el: Project) => (el.datetime = new Date(el.datetime)));
+
+    return data;
   } catch (err) {
     console.log(err);
   }
