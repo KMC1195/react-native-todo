@@ -1,49 +1,29 @@
 import {Pressable, StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {ReactNode} from 'react';
 import StyledText from './StyledText';
-import MyTextInput from './TextField';
-import MyButton from './Button';
-import SnackBar from './SnackBar';
-import {useTodos} from '../hooks/useTodos';
+
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {useColors} from '../hooks/useColors';
 
 interface Props {
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   projectId: number;
+  title: string;
+  content: ReactNode;
+  actions: ReactNode;
+  snackBarMessage?: string;
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const ANIMATION_DURATION = 200;
-const POPUP_TIME = 2500;
 
-export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
-  const [name, setName] = useState('');
-  const [isSnackBarShown, setIsSnackBarShown] = useState(false);
-
+export default function AddTaskPopup({
+  setPopupOpen,
+  title,
+  content,
+  actions,
+}: Props) {
   const colorPalette = useColors();
-  const {createTask} = useTodos();
-
-  function addTask() {
-    if (!name) {
-      setIsSnackBarShown(true);
-      setTimeout(() => {
-        setIsSnackBarShown(false);
-      }, POPUP_TIME);
-
-      return;
-    }
-
-    const newTask = {
-      name,
-      id: Math.random(),
-      completed: false,
-    };
-
-    createTask(projectId, newTask);
-
-    setPopupOpen(false);
-  }
 
   return (
     <>
@@ -59,22 +39,19 @@ export default function AddTaskPopup({setPopupOpen, projectId}: Props) {
               backgroundColor: colorPalette.backround,
             },
           ]}>
-          <StyledText textStyles={styles.title}>Add task</StyledText>
-          <MyTextInput
+          <StyledText textStyles={styles.title}>{title}</StyledText>
+          {/* <MyTextInput
             value={name}
             setValue={setName}
             placeholder="Enter task's name"
-          />
-          <MyButton onPress={addTask} containerStyles={styles.addButton}>
+          /> */}
+          {content}
+          {/* <MyButton onPress={addTask} containerStyles={styles.addButton}>
             Add
-          </MyButton>
+          </MyButton> */}
+          {actions}
         </View>
       </AnimatedPressable>
-
-      <SnackBar
-        message="You can't create a task without a title!"
-        isShown={isSnackBarShown}
-      />
     </>
   );
 }

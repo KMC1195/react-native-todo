@@ -6,6 +6,7 @@ import AppSafeAreaView from '../components/AppSafeAreaView';
 import StyledText from '../components/StyledText';
 import Select from '../components/Select';
 import useTheme from '../hooks/useTheme';
+import CategoriesManager from '../components/CategoriesManager';
 
 interface Props {
   navigation: NavigationProp<any, any>;
@@ -32,6 +33,9 @@ export default function OptionsScreen({navigation}: Props) {
             setSelectedOption={setAppTheme}
           />
         </View>
+
+        <StyledText>Categories:</StyledText>
+        <CategoriesManager />
       </ScrollView>
     </AppSafeAreaView>
   );
@@ -44,5 +48,6 @@ const styles = StyleSheet.create({
   control: {
     flexDirection: 'column',
     gap: 6,
+    marginBottom: 20,
   },
 });

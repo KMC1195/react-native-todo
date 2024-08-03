@@ -1,4 +1,4 @@
-import {StyleSheet, View, Pressable} from 'react-native';
+import {StyleSheet, View, Pressable, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {NavigationProp, RouteProp} from '@react-navigation/native';
 import {colors} from '../theme/colors';
@@ -7,12 +7,13 @@ import StyledText from '../components/StyledText';
 import Button from '../components/Button';
 import Checkbox from '../components/Checkbox';
 import TaskListTile from '../components/TaskListTile';
-import AddTaskPopup from '../components/AddTaskPopup';
+import AddTaskPopup from '../components/Popup';
 import {PencilSquareIcon} from 'react-native-heroicons/outline';
 import {formatDate} from '../utils/formatDate';
 import AppSafeAreaView from '../components/AppSafeAreaView';
 import {useTodos} from '../hooks/useTodos';
 import {useColors} from '../hooks/useColors';
+import TextField from '../components/TextField';
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -28,8 +29,10 @@ interface Props {
 
 export default function ProjectsDetailsScreen({route, navigation}: Props) {
   const [addTaskPopupVisible, setAddTaskPopupVisible] = useState(false);
+  const [taskName, setTaskName] = useState('');
 
-  const {items, toggleProjectCompletion, deleteProject} = useTodos();
+  const {items, toggleProjectCompletion, deleteProject, createTask} =
+    useTodos();
   const colorPalette = useColors();
 
   const projectId = route.params?.projectId;
@@ -43,6 +46,26 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
       opacity: interpolate(scrollOfset.value, [0, 60], [0, 1]),
     };
   });
+
+  function addTask() {
+    if (!taskName) {
+      Alert.alert('Something went wrong', 'Task must have a name!');
+
+      return;
+    }
+
+    const newTask = {
+      name: taskName,
+      id: Math.random(),
+      completed: false,
+    };
+
+    setTaskName('');
+
+    setAddTaskPopupVisible(false);
+
+    createTask(projectId, newTask);
+  }
 
   return (
     <>
@@ -138,6 +161,21 @@ export default function ProjectsDetailsScreen({route, navigation}: Props) {
 
       {addTaskPopupVisible && project && (
         <AddTaskPopup
+          title="Add task"
+          content={
+            <TextField
+              value={taskName}
+              setValue={setTaskName}
+              placeholder="Enter task's name"
+            />
+          }
+          actions={
+            <Button
+              onPress={addTask}
+              containerStyles={styles.addTaskPopupButton}>
+              Add
+            </Button>
+          }
           setPopupOpen={setAddTaskPopupVisible}
           projectId={project.id}
         />
@@ -189,5 +227,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  addTaskPopupButton: {
+    alignSelf: 'flex-end',
+    paddingHorizontal: 20,
   },
 });
